@@ -11,8 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
-    "mongoose": "^5.9.21",
-    "mongoose-beautiful-unique-validation": "^7.1.1",
+    "mongodb": "^2.2.36",
     "nconf": "^0.10.0"
   },
   "devDependencies": {
