@@ -7,8 +7,8 @@
     "cookieLife": 31536000000,
     "tokenLife": 3600
   },
-  "mongoose": {
-    "uri": "mongodb://localhost/",
+  "mongo": {
+    "uri": "mongodb://localhost:27017/ikea",
     "dbname": "ikea"
   }
 }

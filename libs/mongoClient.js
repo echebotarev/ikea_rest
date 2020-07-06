@@ -1,9 +1,10 @@
 const { MongoClient } = require('mongodb');
 
 const assert = require('assert');
+const config = require('./config');
 
 // Connection URL
-const url = 'mongodb://localhost:27017/ikea';
+const url = config.get('mongo:uri');
 
 const Client = {
   db: null,
