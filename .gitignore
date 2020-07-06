@@ -1,0 +1,6 @@
+.DS_STORE
+.vsCode/
+.idea/
+node_modules
+assets
+public
