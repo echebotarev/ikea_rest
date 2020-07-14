@@ -18,7 +18,7 @@ const Client = {
           return rej(err);
         }
 
-        return res(docs);
+        return res(docs[0]);
       });
     });
   }
