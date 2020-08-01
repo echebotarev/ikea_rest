@@ -14,7 +14,7 @@ const corsOptions = {
   optionsSuccessStatus: 200
 };
 
-app.get('/', (req, res) => res.end('Ok'));
+app.get('/', (req, res) => res.end('API is Ok'));
 app.use('/api/v1', cors(corsOptions), rest);
 
 app.listen(config.get('port'), () => {

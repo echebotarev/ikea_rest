@@ -21,6 +21,14 @@ router
     )
       .then(response => response.json())
       .then(json => res.send(json.productListPage));
+  })
+
+  .get('/search', async (req, res) => {
+    fetch(
+      `https://sik.search.blue.cdtapps.com/ru/ru/search-box?q=${encodeURI(req.query.q)}`
+    )
+      .then(response => response.json())
+      .then(json => res.send(json));
   });
 
 module.exports = router;
