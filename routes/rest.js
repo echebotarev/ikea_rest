@@ -1,3 +1,5 @@
+// Availability: https://iows.ikea.com/retail/iows/ru/ru/stores/604/availability/art,10392842
+
 const express = require('express');
 const fetch = require('node-fetch');
 const Client = require('./../libs/mongoClient');
