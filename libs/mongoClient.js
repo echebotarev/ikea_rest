@@ -10,7 +10,7 @@ const Client = {
   db: null,
   findOne(id, type) {
     return new Promise((res, rej) => {
-      Client.db.collection('ikea_spider').find({
+      Client.db.collection(config.get('mongo:productCollectionName')).find({
         itemType: type,
         identifier: id
       }).toArray((err, docs) => {

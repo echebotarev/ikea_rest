@@ -9,6 +9,6 @@
   },
   "mongo": {
     "uri": "mongodb://localhost:27017/ikea",
-    "dbname": "ikea"
+    "productCollectionName": "ikea_spider"
   }
 }
