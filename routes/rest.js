@@ -48,7 +48,7 @@ router
     const url = `${config.get('availableUrl')}?url=${req.query.url}`;
     fetch(url)
       .then(response => response.json())
-      .then(json => res.json(json));
+      .then(json => res.send(json));
   });
 
 module.exports = router;
