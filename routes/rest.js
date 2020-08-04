@@ -1,7 +1,6 @@
-// Availability: https://iows.ikea.com/retail/iows/ru/ru/stores/604/availability/art,10392842
-
 const express = require('express');
 const fetch = require('node-fetch');
+const config = require('./../libs/config');
 const Client = require('./../libs/mongoClient');
 
 const router = express.Router();
@@ -27,7 +26,9 @@ router
 
   .get('/search/products', async (req, res) => {
     fetch(
-      `https://sik.search.blue.cdtapps.com/ru/ru/search-result-page?q=${encodeURI(req.query.q)}`
+      `https://sik.search.blue.cdtapps.com/ru/ru/search-result-page?q=${encodeURI(
+        req.query.q
+      )}`
     )
       .then(response => response.json())
       .then(json => res.send(json));
@@ -35,10 +36,19 @@ router
 
   .get('/search', async (req, res) => {
     fetch(
-      `https://sik.search.blue.cdtapps.com/ru/ru/search-box?q=${encodeURI(req.query.q)}`
+      `https://sik.search.blue.cdtapps.com/ru/ru/search-box?q=${encodeURI(
+        req.query.q
+      )}`
     )
       .then(response => response.json())
       .then(json => res.send(json));
+  })
+
+  .get('/available', async (req, res) => {
+    const url = `${config.get('availableUrl')}?url=${req.query.url}`;
+    fetch(url)
+      .then(response => response.json())
+      .then(json => res.json(json));
   });
 
 module.exports = router;
