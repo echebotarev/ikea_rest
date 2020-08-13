@@ -21,6 +21,20 @@ const Client = {
         return res(docs[0]);
       });
     });
+  },
+
+  find(ids) {
+    return new Promise((res, rej) => {
+      Client.db.collection(config.get('mongo:productCollectionName')).find({
+        $or: ids
+      }).toArray((err, docs) => {
+        if (err) {
+          return rej(err);
+        }
+
+        return res(docs);
+      });
+    });
   }
 };
 
