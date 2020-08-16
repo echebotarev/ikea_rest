@@ -104,12 +104,7 @@ router
         Contract: '37249'
       }
     })
-      .then(response => {
-        console.log('Response', response);
-        console.log('Headers', response.headers);
-
-        return response.json();
-      })
+      .then(response => response.json())
       .then(json => res.send(json));
   });
 
