@@ -3,9 +3,6 @@ const { MongoClient } = require('mongodb');
 const assert = require('assert');
 const config = require('./config');
 
-// Connection URL
-const url = config.get('mongo:uri');
-
 const Client = {
   db: null,
   findOne(id, type) {
@@ -39,11 +36,20 @@ const Client = {
 };
 
 // Use connect method to connect to the server
-MongoClient.connect(url, (err, db) => {
-  assert.equal(null, err);
-  console.log('Connected successfully to server');
+MongoClient.connect(
+  config.get('mongo:uri'),
+  { useUnifiedTopology: true },
+  (err, client) => {
+    assert.equal(null, err);
+    console.log('Connected successfully to server');
 
-  Client.db = db;
-});
+    Client.db = client.db(config.get('mongo:dbname'));
+    Client.db
+      .collection(config.get('mongo:productCollectionName'))
+      .createIndex(
+        { identifier: 1 }
+      );
+  }
+);
 
 module.exports = Client;
