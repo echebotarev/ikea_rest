@@ -106,6 +106,21 @@ router
     })
       .then(response => response.json())
       .then(json => res.send(json));
+  })
+
+  .get('/recommendations', async (req, res) => {
+    const { id } = req.query;
+    const { categoryList } = req.query;
+
+    if (!id || !categoryList) {
+      return res.send([]);
+    }
+
+    const url = `https://recommendation.api.useinsider.com/10002692/ru_RU:0JzQvtGB0LrQstCw/complementary/product/${id}?categoryList=[${encodeURI(categoryList)}]&details=true&size=16&currency=RUB&filter=[item_id][!=][${id}]&`;
+
+    return fetch(url)
+      .then(response => response.json())
+      .then(json => res.send(json));
   });
 
 module.exports = router;
