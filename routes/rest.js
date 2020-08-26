@@ -29,15 +29,17 @@ router
     const { categoryId } = req.params;
     const page = parseInt(req.query.page, 10);
 
+    const sort = req.query.sort || 'RELEVANCE';
+
     if (page && page !== 1) {
       const end = page * PER_PAGE;
       const start = end - PER_PAGE;
 
       const resultProducts = await getProducts(
-        `https://sik.search.blue.cdtapps.com/ru/ru/product-list-page?category=${categoryId}&sort=RELEVANCE&size=24&subcategories-style=tree-navigation&c=plp`
+        `https://sik.search.blue.cdtapps.com/ru/ru/product-list-page?category=${categoryId}&sort=${sort}&size=24&subcategories-style=tree-navigation&c=plp`
       );
       const resultMoreProducts = await getProducts(
-        `http://sik.search.blue.cdtapps.com/ru/ru/product-list-page/more-products?&category=${categoryId}&sort=RELEVANCE&start=${start}&end=${end}&c=plp`
+        `http://sik.search.blue.cdtapps.com/ru/ru/product-list-page/more-products?&category=${categoryId}&sort=${sort}&start=${start}&end=${end}&c=plp`
       );
 
       res.send(
@@ -49,7 +51,7 @@ router
       );
     } else {
       const result = await getProducts(
-        `https://sik.search.blue.cdtapps.com/ru/ru/product-list-page?category=${categoryId}&sort=RELEVANCE&size=24&subcategories-style=tree-navigation&c=plp`
+        `https://sik.search.blue.cdtapps.com/ru/ru/product-list-page?category=${categoryId}&sort=${sort}&size=24&subcategories-style=tree-navigation&c=plp`
       );
       res.send(result.productListPage);
     }
