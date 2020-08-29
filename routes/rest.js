@@ -8,10 +8,7 @@ const router = express.Router();
 const getProducts = url =>
   new Promise((resolve, reject) => {
     fetch(url)
-      .then(response => {
-        console.log('Res', response);
-        return response.json();
-      })
+      .then(response => response.json())
       .then(json => resolve(json))
       .catch(e => reject(e));
   });
