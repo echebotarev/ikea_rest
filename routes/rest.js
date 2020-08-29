@@ -44,7 +44,7 @@ router
       const start = end - PER_PAGE;
 
       const resultProducts = await getProducts(
-        `https://sik.search.blue.cdtapps.com/ru/ru/product-list-page?category=${categoryId}&size=24&subcategories-style=tree-navigation&c=plp&${queries}`
+        `https://sik.search.blue.cdtapps.com/ru/ru/product-list-page?category=${categoryId}&size=24&c=plp&${queries}`
       );
       const resultMoreProducts = await getProducts(
         `http://sik.search.blue.cdtapps.com/ru/ru/product-list-page/more-products?&category=${categoryId}&start=${start}&end=${end}&c=plp&${queries}`
@@ -59,7 +59,7 @@ router
       );
     } else {
       const result = await getProducts(
-        `https://sik.search.blue.cdtapps.com/ru/ru/product-list-page?category=${categoryId}&size=24&subcategories-style=tree-navigation&c=plp&${queries}`
+        `https://sik.search.blue.cdtapps.com/ru/ru/product-list-page?category=${categoryId}&size=24&c=plp&${queries}`
       );
       res.send(result.productListPage);
     }
