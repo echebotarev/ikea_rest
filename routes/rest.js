@@ -102,9 +102,12 @@ router
      * window.Checkout.settings.shoppinglist.consumer
      * */
 
+    const internetShopId = 604;
+    const samaraShopId = 442;
+
     const { type } = req.query;
     const id = req.query.id.replace('s', '');
-    const url = `https://iows.ikea.com/retail/iows/ru/ru/stores/524/availability/${type}/${id}`;
+    const url = `https://iows.ikea.com/retail/iows/ru/ru/stores/${samaraShopId}/availability/${type}/${id}`;
     fetch(url, {
       headers: {
         Authority: 'iows.ikea.com',

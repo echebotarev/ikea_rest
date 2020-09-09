@@ -7,9 +7,9 @@
     "cookieLife": 31536000000,
     "tokenLife": 3600
   },
-  "availableUrl": "http://localhost:2000/availability",
   "mongo": {
-    "uri": "mongodb://localhost:27017/ikea",
+    "uri": "mongodb://localhost:27017/",
+    "dbname": "ikea_2408",
     "productCollectionName": "ikea_spider"
   }
 }
