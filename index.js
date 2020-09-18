@@ -10,7 +10,7 @@ const rest = require('./routes/rest');
 const app = express();
 
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: true,
   optionsSuccessStatus: 200
 };
 
