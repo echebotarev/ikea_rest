@@ -11,10 +11,11 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "dayjs": "^1.8.36",
     "express": "^4.17.1",
     "mongodb": "^2.2.36",
     "nconf": "^0.10.0",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.1"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
