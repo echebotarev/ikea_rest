@@ -1,6 +1,6 @@
 const express = require('express');
 const fetch = require('node-fetch');
-const config = require('./../libs/config');
+const sgMail = require('./../libs/sgmail');
 const Client = require('./../libs/mongoClient');
 
 const router = express.Router();
@@ -9,7 +9,16 @@ const getProducts = url =>
   new Promise((resolve, reject) => {
     fetch(url)
       .then(response => response.json())
-      .then(json => resolve(json))
+      .then(json => {
+        if (!json.productListPage || !json.moreProducts) {
+          sgMail(
+            'sik.search.blue.cdtapps.com',
+            `Что-то не так с запросом ${url}`
+          );
+        }
+
+        return resolve(json);
+      })
       .catch(e => reject(e));
   });
 const getQueries = payload =>

@@ -11,5 +11,7 @@
     "uri": "mongodb://localhost:27017/",
     "dbname": "ikea_2408",
     "productCollectionName": "ikea_spider"
-  }
+  },
+
+  "SENDGRID_API_KEY": "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"
 }
