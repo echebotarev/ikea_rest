@@ -10,7 +10,7 @@ const getProducts = url =>
     fetch(url)
       .then(response => response.json())
       .then(json => {
-        if (!json.productListPage || !json.moreProducts) {
+        if (json.code === 400) {
           sgMail(
             'sik.search.blue.cdtapps.com',
             `Что-то не так с запросом ${url}`
