@@ -9,11 +9,11 @@ const getProducts = url =>
   new Promise((resolve, reject) => {
     fetch(url)
       .then(response => response.json())
-      .then(json => {
+      .then((json) => {
         if (json.code === 400 || json.code === 404) {
           sgMail(
             'sik.search.blue.cdtapps.com',
-            `Что-то не так с запросом ${url}`
+            `Что-то не так с запросом ${url}, \r\nStatus: ${json.status}, \r\nReason: ${json.reason}`
           );
         }
 
