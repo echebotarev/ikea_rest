@@ -5,7 +5,7 @@ const Client = require('./../libs/mongoClient');
 
 const router = express.Router();
 
-const getProducts = url =>
+const getProducts = (url, path) =>
   new Promise((resolve, reject) => {
     fetch(url)
       .then(response => response.json())
@@ -13,7 +13,7 @@ const getProducts = url =>
         if (json.code === 400 || json.code === 404) {
           sgMail(
             'sik.search.blue.cdtapps.com',
-            `Что-то не так с запросом ${url}, \r\nStatus: ${json.status}, \r\nReason: ${json.reason}`
+            `Что-то не так с запросом ${url}, \r\nStatus: ${json.status}, \r\nReason: ${json.reason}, \r\nPath: ${path}`
           );
         }
 
@@ -46,6 +46,9 @@ router
     const { categoryId } = req.params;
     const page = parseInt(req.query.page, 10);
 
+    const { fullPath } = req.query;
+    delete req.query.fullPath;
+
     const queries = encodeURI(getQueries(req.query)).replace(/,/g, '%2C');
 
     if (page && page !== 1) {
@@ -68,7 +71,8 @@ router
       );
     } else {
       const result = await getProducts(
-        `https://sik.search.blue.cdtapps.com/ru/ru/product-list-page?category=${categoryId}&size=24&${queries}`
+        `https://sik.search.blue.cdtapps.com/ru/ru/product-list-page?category=${categoryId}&size=24&${queries}`,
+        fullPath
       );
       res.send(result.productListPage || result);
     }
