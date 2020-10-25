@@ -46,9 +46,6 @@ router
     const { categoryId } = req.params;
     const page = parseInt(req.query.page, 10);
 
-    const { fullPath } = req.query;
-    delete req.query.fullPath;
-
     const queries = encodeURI(getQueries(req.query)).replace(/,/g, '%2C');
 
     if (page && page !== 1) {
