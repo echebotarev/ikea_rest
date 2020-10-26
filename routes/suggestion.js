@@ -14,10 +14,11 @@ const getSuggestionProductsId = productId => new Promise((resolve, reject) => {
 router
   .get('/:productId', async (req, res) => {
     const { productId } = req.params;
-    const data = await getSuggestionProductsId(productId);
-    console.log('Data', data);
+    const { data } = await getSuggestionProductsId(productId);
+    const ids = data.map(item => ({ identifier: item.id }));
+    const products = await Client.find(ids);
 
-    res.send('Ok');
+    res.send(products);
   });
 
 module.exports = router;
