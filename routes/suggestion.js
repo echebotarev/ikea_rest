@@ -16,7 +16,7 @@ router
     const { productId } = req.params;
     const { data } = await getSuggestionProductsId(productId);
     const ids = data.map(item => ({ identifier: item.id }));
-    const products = await Client.find(ids);
+    const products = ids.length ? await Client.find(ids) : [];
 
     res.send(products);
   });
