@@ -24,7 +24,7 @@ const getProducts = (url, ua) =>
 const getQueries = payload =>
   Object.entries(payload).reduce(
     (acc, [key, value], index, array) =>
-      key === 'id' || key === 'page'
+      key === 'id' || key === 'page' || key.includes('utm_')
         ? acc
         : `${acc}${key}=${value}${index === array.length - 1 ? '' : '&'}`,
     ''
