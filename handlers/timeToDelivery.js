@@ -5,7 +5,7 @@ dayjs.locale('ru');
 
 
 function getDeliveryDay(startDay) {
-  const START_DAY = '2020-11-15T00:00:00+05';
+  const START_DAY = '2020-11-14T00:00:00+05';
   const deliveryDay = startDay ? startDay.add(7, 'day') : dayjs(START_DAY);
   const nowDay = dayjs();
 
