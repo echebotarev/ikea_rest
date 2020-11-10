@@ -1,7 +1,9 @@
 const express = require('express');
 const fetch = require('node-fetch');
-const sgMail = require('./../libs/sgmail');
 const Client = require('./../libs/mongoClient');
+
+const sgMail = require('./../libs/sgmail');
+const getDeliveryDay = require('./../handlers/timeToDelivery');
 
 const router = express.Router();
 
@@ -146,6 +148,11 @@ router
     return fetch(url)
       .then(response => response.json())
       .then(json => res.send(json));
+  })
+
+  .get('/time-to-delivery', (req, res) => {
+    const deliveryDay = getDeliveryDay();
+    res.send(deliveryDay);
   });
 
 module.exports = router;
