@@ -10,9 +10,11 @@
   "author": "Egor Chebotarev",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/mail": "^7.3.0",
     "cors": "^2.8.5",
-    "dayjs": "^1.8.36",
+    "dayjs": "^1.9.5",
     "express": "^4.17.1",
+    "express-useragent": "^1.0.15",
     "mongodb": "^2.2.36",
     "nconf": "^0.10.0",
     "node-fetch": "^2.6.1"

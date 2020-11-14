@@ -1,21 +1,32 @@
 const express = require('express');
 const fetch = require('node-fetch');
-const config = require('./../libs/config');
 const Client = require('./../libs/mongoClient');
+
+const sgMail = require('./../libs/sgmail');
+const getDeliveryDay = require('./../handlers/timeToDelivery');
 
 const router = express.Router();
 
-const getProducts = url =>
+const getProducts = (url, ua) =>
   new Promise((resolve, reject) => {
     fetch(url)
       .then(response => response.json())
-      .then(json => resolve(json))
+      .then((json) => {
+        if (json.code === 400 || json.code === 404) {
+          sgMail(
+            'sik.search.blue.cdtapps.com',
+            `Что-то не так с запросом ${url}, \r\nStatus: ${json.status}, \r\nReason: ${json.reason}, \r\nUA: ${JSON.stringify(ua)}`
+          );
+        }
+
+        return resolve(json);
+      })
       .catch(e => reject(e));
   });
 const getQueries = payload =>
   Object.entries(payload).reduce(
     (acc, [key, value], index, array) =>
-      key === 'id' || key === 'page'
+      key === 'id' || key === 'page' || key.includes('utm_')
         ? acc
         : `${acc}${key}=${value}${index === array.length - 1 ? '' : '&'}`,
     ''
@@ -59,9 +70,10 @@ router
       );
     } else {
       const result = await getProducts(
-        `https://sik.search.blue.cdtapps.com/ru/ru/product-list-page?category=${categoryId}&size=24&${queries}`
+        `https://sik.search.blue.cdtapps.com/ru/ru/product-list-page?category=${categoryId}&size=24&${queries}`,
+        req.useragent
       );
-      res.send(result.productListPage);
+      res.send(result.productListPage || result);
     }
   })
 
@@ -136,6 +148,11 @@ router
     return fetch(url)
       .then(response => response.json())
       .then(json => res.send(json));
+  })
+
+  .get('/time-to-delivery', (req, res) => {
+    const deliveryDay = getDeliveryDay();
+    res.send(deliveryDay);
   });
 
 module.exports = router;

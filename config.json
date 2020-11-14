@@ -9,7 +9,9 @@
   },
   "mongo": {
     "uri": "mongodb://localhost:27017/",
-    "dbname": "ikea_2408",
+    "dbname": "ikea_0909",
     "productCollectionName": "ikea_spider"
-  }
+  },
+
+  "SENDGRID_API_KEY": "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"
 }
