@@ -3,6 +3,8 @@ const path = require('path');
 const convert = require('xml-js');
 const Client = require('./../libs/mongoClient');
 
+const { categoriesDict } = require('./../constant');
+
 const getPrice = require('./../handlers/price');
 
 const getCategory = (category, parentId = null) => {
@@ -13,13 +15,18 @@ const getCategory = (category, parentId = null) => {
     };
   }
 
+  const id = categoriesDict[category.identifier] ?
+    categoriesDict[category.identifier] :
+    category.identifier;
+
+  // eslint-disable-next-line no-param-reassign
+  parentId = categoriesDict[parentId] ? categoriesDict[parentId] : parentId;
+
   return {
-    id: category.identifier,
+    id,
     data: {
       _attributes: Object.assign(
-        {
-          id: category.identifier
-        },
+        { id },
         parentId ? { parentId } : {}
       ),
       _text: category.title
@@ -99,6 +106,9 @@ const getOffer = product => {
         _text: image.content.url
       }));
 
+  let id = getIdFromUrl(getParent(product.breadcrumbs).item);
+  id = categoriesDict[id] ? categoriesDict[id] : id;
+
   return {
     _attributes: {
       id: product.identifier
@@ -119,7 +129,7 @@ const getOffer = product => {
       _text: 'KZT'
     },
     categoryId: {
-      _text: getIdFromUrl(getParent(product.breadcrumbs).item)
+      _text: id
     },
     param: getParams(product),
     picture: getPictures(product.images.fullMediaList)
@@ -188,14 +198,18 @@ const createYmlCatalog = async () => {
   );
 
   // console.log('Res', result);
-  fs.writeFile(path.join(__dirname, '../static', 'yml_catalog.xml'), result, (err) => {
-    if (err) {
-      return console.error(err);
-    }
+  fs.writeFile(
+    path.join(__dirname, '../static', 'yml_catalog.xml'),
+    result,
+    err => {
+      if (err) {
+        return console.error(err);
+      }
 
-    console.log('Ok');
-    return process.exit();
-  });
+      console.log('Ok');
+      return process.exit();
+    }
+  );
 };
 
 setTimeout(createYmlCatalog, 2000);
