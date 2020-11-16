@@ -188,7 +188,7 @@ const createYmlCatalog = async () => {
   );
 
   // console.log('Res', result);
-  fs.writeFile(path.join(__dirname, '../yml', 'yml_catalog.xml'), result, (err) => {
+  fs.writeFile(path.join(__dirname, '../static', 'yml_catalog.xml'), result, (err) => {
     if (err) {
       return console.error(err);
     }

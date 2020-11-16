@@ -6,7 +6,6 @@ const config = require('./libs/config');
 
 /** ROUTES * */
 const rest = require('./routes/rest');
-const xml = require('./routes/xml');
 const suggestion = require('./routes/suggestion');
 /** ROUTES * */
 
@@ -23,8 +22,9 @@ const corsOptions = {
 
 app.get('/', (req, res) => res.end('API is Ok'));
 app.use('/api/v1', cors(corsOptions), rest);
-app.use('/api/xml', xml);
 app.use('/api/v1/suggestion', cors(corsOptions), suggestion);
+
+app.use(express.static('static'));
 
 app.listen(config.get('port'), () => {
   console.log(`Listening on port ${config.get('port')}!`);
