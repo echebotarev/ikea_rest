@@ -17,7 +17,8 @@
     "express-useragent": "^1.0.15",
     "mongodb": "^2.2.36",
     "nconf": "^0.10.0",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "eslint": "^5.16.0",

@@ -34,6 +34,20 @@ const Client = {
         return res(docs);
       });
     });
+  },
+
+  get(type) {
+    return new Promise((res, rej) => {
+      Client.db.collection(config.get('mongo:productCollectionName')).find({
+        itemType: type
+      }).toArray((err, docs) => {
+        if (err) {
+          return rej(err);
+        }
+
+        return res(docs);
+      });
+    });
   }
 };
 
