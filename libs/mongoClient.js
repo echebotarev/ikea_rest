@@ -68,7 +68,7 @@ MongoClient.connect(
   { useUnifiedTopology: true },
   async (err, client) => {
     assert.equal(null, err);
-    console.log('Connected successfully to server');
+    console.log('Connected successfully to Base');
 
     const listDbs = await client.db('Test').admin().listDatabases();
     const dbname = getDbName(0, listDbs.databases);
