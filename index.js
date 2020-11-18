@@ -4,6 +4,11 @@ const cors = require('cors');
 
 const config = require('./libs/config');
 
+/** CRON */
+// eslint-disable-next-line no-unused-vars
+const cron = require('./cron');
+/** CRON */
+
 /** ROUTES * */
 const rest = require('./routes/rest');
 const suggestion = require('./routes/suggestion');

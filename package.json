@@ -17,6 +17,7 @@
     "express-useragent": "^1.0.15",
     "mongodb": "^2.2.36",
     "nconf": "^0.10.0",
+    "node-cron": "^2.0.3",
     "node-fetch": "^2.6.1",
     "xml-js": "^1.6.11"
   },

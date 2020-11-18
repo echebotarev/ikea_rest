@@ -206,8 +206,7 @@ const createYmlCatalog = async () => {
         return console.error(err);
       }
 
-      console.log('Ok');
-      return process.exit();
+      return console.log('Ok');
     }
   );
 };
