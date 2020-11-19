@@ -203,13 +203,12 @@ const createYmlCatalog = async () => {
         return console.error(err);
       }
 
-      return console.log('Ok');
+      console.log('Ok');
+      return process.exit();
     }
   );
 };
 
 setTimeout(async () => {
   await createYmlCatalog();
-
-  process.exit();
 }, 2000);

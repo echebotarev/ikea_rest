@@ -74,13 +74,12 @@ const createSitemap = async () => {
         return console.error(err);
       }
 
-      return console.log('Ok');
+      console.log('Ok');
+      return process.exit();
     }
   );
 };
 
 setTimeout(async () => {
   await createSitemap();
-
-  process.exit();
 }, 2000);
