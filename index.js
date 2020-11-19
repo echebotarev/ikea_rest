@@ -6,7 +6,7 @@ const config = require('./libs/config');
 
 /** CRON */
 // eslint-disable-next-line no-unused-vars
-const cron = require('./cron');
+// const cron = require('./cron');
 /** CRON */
 
 /** ROUTES * */
