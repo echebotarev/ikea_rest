@@ -72,7 +72,11 @@ const getOffer = product => {
     return arr[arr.length - 1].trim().replace('/', '');
   };
   const getParent = breadcrumbs => {
-    if (!breadcrumbs || !breadcrumbs.itemListElement) {
+    if (
+      !breadcrumbs ||
+      !breadcrumbs.itemListElement ||
+      !breadcrumbs.itemListElement.length
+    ) {
       return {};
     }
 
@@ -120,13 +124,13 @@ const getOffer = product => {
       _text: getPrice(product.price.price.mainPriceProps.price.integer)
     },
     description: {
-      _text: product.summary_description || null
+      _text: product.summary_description || ''
     },
     currencyId: {
       _text: 'KZT'
     },
     categoryId: {
-      _text: id
+      _text: id || ''
     },
     param: getParams(product),
     picture: getPictures(product.images.fullMediaList)
