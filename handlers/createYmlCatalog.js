@@ -59,7 +59,9 @@ const getCategories = categories => {
     }
   }
 
-  return xmlCategories;
+  // возвращаем массив ID, чтобы проверять существующие категории
+  // при создании массива офферов
+  return { xmlCategories, ids: usedIds };
 };
 
 const getOffer = product => {
@@ -145,6 +147,8 @@ const createYmlCatalog = async () => {
   const categories = await Client.get('category');
   const products = await Client.get('product');
 
+  const { xmlCategories, ids } = getCategories(categories);
+
   const result = convert.json2xml(
     {
       _declaration: {
@@ -179,7 +183,7 @@ const createYmlCatalog = async () => {
             }
           },
           categories: {
-            category: getCategories(categories)
+            category: xmlCategories
           },
           'delivery-options': {
             option: {
@@ -190,7 +194,12 @@ const createYmlCatalog = async () => {
             }
           },
           offers: {
-            offer: getOffers(products)
+            // проверяем существует ли такая категория
+            // eslint-disable-next-line no-shadow
+            offer: (products => products.map((product) => {
+              const offer = getOffer(product);
+              return ids.includes(offer.categoryId) ? offer : {};
+            }))(products)
           }
         }
       }
