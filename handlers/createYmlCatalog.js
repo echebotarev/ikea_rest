@@ -1,6 +1,15 @@
 const fs = require('fs');
 const path = require('path');
 const convert = require('xml-js');
+
+const utc = require('dayjs/plugin/utc');
+const timezone = require('dayjs/plugin/timezone');
+const dayjs = require('dayjs');
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault('Russia/Moscow');
+
 const Client = require('./../libs/mongoClient');
 
 const { categoriesDict } = require('./../constant');
@@ -141,9 +150,6 @@ const getOffer = product => {
 const getOffers = products => products.map(getOffer);
 
 const createYmlCatalog = async () => {
-  const d = new Date();
-  const minutes = d.getMinutes();
-
   const categories = await Client.get('category');
   const products = await Client.get('product');
 
@@ -159,10 +165,7 @@ const createYmlCatalog = async () => {
       },
       yml_catalog: {
         _attributes: {
-          date: `${d.getFullYear()}-${d.getMonth() +
-            1}-${d.getDate()} ${d.getHours()}:${
-            minutes < 10 ? `0${minutes}` : minutes
-          }`
+          date: dayjs().format('YYYY-MM-DD HH-mm')
         },
         shop: {
           name: {
