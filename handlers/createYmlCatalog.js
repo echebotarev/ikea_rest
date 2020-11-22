@@ -158,7 +158,7 @@ const createYmlCatalog = async () => {
       },
       yml_catalog: {
         _attributes: {
-          date: dayjs().add(3, 'hour').format('YYYY-MM-DD HH-mm')
+          date: dayjs().add(5, 'hour').format('YYYY-MM-DD HH-mm')
         },
         shop: {
           name: {
