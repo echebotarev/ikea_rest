@@ -2,13 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const convert = require('xml-js');
 
-const utc = require('dayjs/plugin/utc');
-const timezone = require('dayjs/plugin/timezone');
 const dayjs = require('dayjs');
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.tz.setDefault('Russia/Moscow');
 
 const Client = require('./../libs/mongoClient');
 
@@ -147,7 +141,6 @@ const getOffer = product => {
     picture: getPictures(product.images.fullMediaList)
   };
 };
-const getOffers = products => products.map(getOffer);
 
 const createYmlCatalog = async () => {
   const categories = await Client.get('category');
@@ -165,7 +158,7 @@ const createYmlCatalog = async () => {
       },
       yml_catalog: {
         _attributes: {
-          date: dayjs().format('YYYY-MM-DD HH-mm')
+          date: dayjs().add(3, 'hour').format('YYYY-MM-DD HH-mm')
         },
         shop: {
           name: {
