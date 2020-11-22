@@ -196,10 +196,19 @@ const createYmlCatalog = async () => {
           offers: {
             // проверяем существует ли такая категория
             // eslint-disable-next-line no-shadow
-            offer: (products => products.map((product) => {
-              const offer = getOffer(product);
-              return ids.includes(offer.categoryId) ? offer : {};
-            }))(products)
+            offer: (products => {
+              const output = [];
+
+              products.map(product => {
+                const offer = getOffer(product);
+                // eslint-disable-next-line no-underscore-dangle
+                if (ids.includes(offer.categoryId._text)) {
+                  output.push(offer);
+                }
+              });
+
+              return output;
+            })(products)
           }
         }
       }
