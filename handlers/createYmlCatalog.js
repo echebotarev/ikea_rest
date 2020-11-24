@@ -158,7 +158,7 @@ const createYmlCatalog = async () => {
       },
       yml_catalog: {
         _attributes: {
-          date: dayjs().add(5, 'hour').format('YYYY-MM-DD HH-mm')
+          date: dayjs().add(3, 'hour').format('YYYY-MM-DD HH-mm')
         },
         shop: {
           name: {
@@ -191,14 +191,20 @@ const createYmlCatalog = async () => {
           },
           offers: {
             // проверяем существует ли такая категория
+            // есть ли изображения и описание
             // eslint-disable-next-line no-shadow
             offer: (products => {
               const output = [];
 
-              products.map(product => {
+              products.map((product) => {
                 const offer = getOffer(product);
-                // eslint-disable-next-line no-underscore-dangle
-                if (ids.includes(offer.categoryId._text)) {
+                if (
+                  // eslint-disable-next-line no-underscore-dangle
+                  ids.includes(offer.categoryId._text) &&
+                  // eslint-disable-next-line no-underscore-dangle
+                  offer.description._text &&
+                  offer.picture.length
+                ) {
                   output.push(offer);
                 }
               });
