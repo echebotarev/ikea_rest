@@ -115,6 +115,10 @@ const getOffer = product => {
   let id = getIdFromUrl(getParent(product.breadcrumbs).item);
   id = categoriesDict[id] ? categoriesDict[id] : id;
 
+  if (!product.images) {
+    return null;
+  }
+
   return {
     _attributes: {
       id: product.identifier
@@ -199,6 +203,7 @@ const createYmlCatalog = async () => {
               products.map((product) => {
                 const offer = getOffer(product);
                 if (
+                  offer &&
                   // eslint-disable-next-line no-underscore-dangle
                   ids.includes(offer.categoryId._text) &&
                   // eslint-disable-next-line no-underscore-dangle
