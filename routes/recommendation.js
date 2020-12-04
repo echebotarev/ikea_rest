@@ -37,7 +37,7 @@ router
       .then(response => response.json())
       .then(json => res.send(json));
   })
-  .get('/same-category', async (req, res) => {
+  .get('/same', async (req, res) => {
     const { id } = req.query;
 
     if (!id) {
