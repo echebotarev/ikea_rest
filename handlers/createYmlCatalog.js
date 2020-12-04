@@ -11,7 +11,7 @@ const { categoriesDict } = require('./../constant');
 const getPrice = require('./../handlers/price');
 
 const getCategory = (category, parentId = null) => {
-  if (category.identifier === 'products') {
+  if (category.identifier === 'products' || category.identifier === 'pubdc7bb900') {
     return {
       id: category.identifier,
       data: null
