@@ -12,6 +12,7 @@ const config = require('./libs/config');
 /** ROUTES * */
 const rest = require('./routes/rest');
 const suggestion = require('./routes/suggestion');
+const recommendation = require('./routes/recommendation');
 /** ROUTES * */
 
 const setMiddlewares = require('./libs/setMiddlewares');
@@ -28,6 +29,7 @@ const corsOptions = {
 app.get('/', (req, res) => res.end('API is Ok'));
 app.use('/api/v1', cors(corsOptions), rest);
 app.use('/api/v1/suggestion', cors(corsOptions), suggestion);
+app.use('/api/v1/recommendation', cors(corsOptions), recommendation);
 
 app.use('/api/v1/static', express.static('static'));
 
