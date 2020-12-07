@@ -19,10 +19,10 @@ const getRecommendedProductIds = ({ productId, filter = 'allSameCat' }) =>
       .then(json => resolve(json))
       .catch(e => reject(e));
   });
-const getRecommendedProductIdsByStyle = ({ productId }) =>
+const getRecommendedProductIdsByUrlScheme = ({ productId, type = 'style' }) =>
   new Promise((resolve, reject) => {
     fetch(
-      `https://rec.ingka.com/services/ru-prod/items/style/${productId}?n=16&productId=${productId}`
+      `https://rec.ingka.com/services/ru-prod/items/${type}/${type === 'style' ? productId : ''}?n=16&productId=${productId}`
     )
       .then(response => response.json())
       .then(json => resolve(json))
@@ -59,6 +59,7 @@ router
 
     res.send(products);
   })
+
   .get('/style', async (req, res) => {
     const { id } = req.query;
 
@@ -66,10 +67,26 @@ router
       return res.send([]);
     }
 
-    const data = await getRecommendedProductIdsByStyle({ productId: id });
-    console.log('Data', data.data.recommended);
+    const data = await getRecommendedProductIdsByUrlScheme({ productId: id });
+    const ids = data.data.recommended.map(item => ({
+      identifier: item.itemId
+    }));
+    const products = ids.length ? await Client.find(ids) : [];
 
-    const ids = data.data.recommended.map(item => ({ identifier: item.itemId }));
+    res.send(products);
+  })
+
+  .get('/series', async (req, res) => {
+    const { id } = req.query;
+
+    if (!id) {
+      return res.send([]);
+    }
+
+    const data = await getRecommendedProductIdsByUrlScheme({ productId: id, type: 'series' });
+    const ids = data.map(item => ({
+      identifier: item.itemId
+    }));
     const products = ids.length ? await Client.find(ids) : [];
 
     res.send(products);
