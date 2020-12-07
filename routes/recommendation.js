@@ -19,6 +19,15 @@ const getRecommendedProductIds = ({ productId, filter = 'allSameCat' }) =>
       .then(json => resolve(json))
       .catch(e => reject(e));
   });
+const getRecommendedProductIdsByStyle = ({ productId }) =>
+  new Promise((resolve, reject) => {
+    fetch(
+      `https://rec.ingka.com/services/ru-prod/items/style/${productId}?n=16&productId=${productId}`
+    )
+      .then(response => response.json())
+      .then(json => resolve(json))
+      .catch(e => reject(e));
+  });
 
 router
   .get('/similar', async (req, res) => {
@@ -46,6 +55,21 @@ router
 
     const data = await getRecommendedProductIds({ productId: id });
     const ids = data.map(item => ({ identifier: item.itemId }));
+    const products = ids.length ? await Client.find(ids) : [];
+
+    res.send(products);
+  })
+  .get('/style', async (req, res) => {
+    const { id } = req.query;
+
+    if (!id) {
+      return res.send([]);
+    }
+
+    const data = await getRecommendedProductIdsByStyle({ productId: id });
+    console.log('Data', data.data.recommended);
+
+    const ids = data.data.recommended.map(item => ({ identifier: item.itemId }));
     const products = ids.length ? await Client.find(ids) : [];
 
     res.send(products);
