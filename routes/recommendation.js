@@ -22,7 +22,9 @@ const getRecommendedProductIds = ({ productId, filter = 'allSameCat' }) =>
 const getRecommendedProductIdsByUrlScheme = ({ productId, type = 'style' }) =>
   new Promise((resolve, reject) => {
     fetch(
-      `https://rec.ingka.com/services/ru-prod/items/${type}/${type === 'style' ? productId : ''}?n=16&productId=${productId}`
+      `https://rec.ingka.com/services/ru-prod/items/${type}/${
+        type === 'style' ? productId : ''
+      }?n=16&productId=${productId}`
     )
       .then(response => response.json())
       .then(json => resolve(json))
@@ -38,14 +40,16 @@ router
       return res.send([]);
     }
 
-    const url = `https://recommendation.api.useinsider.com/10002692/ru_RU:0JzQvtGB0LrQstCw/similar/product/${id}?categoryList=[${encodeURI(
-      categoryList
-    )}]&details=true&size=24&currency=RUB&filter=[item_id][!=][${id}]&`;
+    const list = JSON.stringify(categoryList.split(','));
+    const url = `https://recommendation.api.useinsider.com/10002692/ru_RU:0JzQvtGB0LrQstCw/similar/product/${id}?categoryList=${encodeURI(
+      list
+    )}&details=true&size=24&currency=RUB&filter=[item_id][!=][${id}]&`;
 
     return fetch(url)
       .then(response => response.json())
       .then(json => res.send(json));
   })
+
   .get('/same', async (req, res) => {
     const { id } = req.query;
 
@@ -83,13 +87,40 @@ router
       return res.send([]);
     }
 
-    const data = await getRecommendedProductIdsByUrlScheme({ productId: id, type: 'series' });
+    const data = await getRecommendedProductIdsByUrlScheme({
+      productId: id,
+      type: 'series'
+    });
     const ids = data.map(item => ({
       identifier: item.itemId
     }));
     const products = ids.length ? await Client.find(ids) : [];
 
     res.send(products);
+  })
+
+  .get('/trending', async (req, res) => {
+    const { id } = req.query;
+    const { categoryList } = req.query;
+
+    if (!id || !categoryList) {
+      return res.send([]);
+    }
+
+    const list = JSON.stringify(categoryList.split(','));
+    const url = `https://recommendation.api.useinsider.com/10002692/ru_RU:0JzQvtGB0LrQstCw/trending/products?details=true&categoryList=${encodeURI(
+      list
+    )}&size=16&currency=RUB&`;
+
+    return fetch(url)
+      .then(response => response.json())
+      .then(async json => {
+        const ids = json.data.map(item => ({
+          identifier: item.item_id
+        }));
+        const products = ids.length ? await Client.find(ids) : [];
+        return res.send(products);
+      });
   });
 
 module.exports = router;
