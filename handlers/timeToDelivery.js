@@ -10,7 +10,7 @@ function getDeliveryDay(startDay) {
   const nowDay = dayjs();
 
   // на период новогодних праздников
-  return '14 января';
+  return '17 января';
   //
   // if (deliveryDay.diff(nowDay, 'day') > 7) {
   //   return deliveryDay.format('DD MMMM');
