@@ -7,7 +7,7 @@ const getDeliveryDay = require('./../handlers/timeToDelivery');
 
 const router = express.Router();
 
-const getProducts = (url, ua) =>
+const getProducts = url =>
   new Promise((resolve, reject) => {
     fetch(url)
       .then(response => response.json())
@@ -15,7 +15,7 @@ const getProducts = (url, ua) =>
         if (json.code === 400 || json.code === 404) {
           sgMail(
             'sik.search.blue.cdtapps.com',
-            `Что-то не так с запросом ${url}, \r\nStatus: ${json.status}, \r\nReason: ${json.reason}, \r\nUA: ${JSON.stringify(ua)}`
+            `Что-то не так с запросом ${url}, \r\nStatus: ${json.status}, \r\nReason: ${json.reason}}`
           );
         }
 
@@ -70,8 +70,7 @@ router
       );
     } else {
       const result = await getProducts(
-        `https://sik.search.blue.cdtapps.com/ru/ru/product-list-page?category=${categoryId}&size=24&${queries}`,
-        req.useragent
+        `https://sik.search.blue.cdtapps.com/ru/ru/product-list-page?category=${categoryId}&size=24&${queries}`
       );
       res.send(result.productListPage || result);
     }
