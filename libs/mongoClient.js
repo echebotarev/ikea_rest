@@ -22,6 +22,9 @@ const Client = {
     });
   },
 
+  /**
+   * [{ identifier: [id] }, ...]
+   * */
   find(ids) {
     return new Promise((res, rej) => {
       Client.db.collection(config.get('mongo:productCollectionName')).find({

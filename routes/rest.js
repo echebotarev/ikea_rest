@@ -61,18 +61,32 @@ router
         `http://sik.search.blue.cdtapps.com/ru/ru/product-list-page/more-products?&category=${categoryId}&start=${start}&end=${end}&${queries}`
       );
 
-      res.send(
-        Object.assign(
-          {},
-          resultProducts.productListPage,
-          resultMoreProducts.moreProducts
-        )
-      );
+      const result = Object.assign({}, resultProducts.productListPage, resultMoreProducts.moreProducts);
+      const ids = result.productWindow.map(p => ({ identifier: p.id }));
+      result.productWindow = await Client.find(ids);
+
+      res.send(result);
     } else {
       const result = await getProducts(
         `https://sik.search.blue.cdtapps.com/ru/ru/product-list-page?category=${categoryId}&size=24&${queries}`
       );
-      res.send(result.productListPage || result);
+
+      if (!result.productListPage) {
+        /**
+         * Ответ типа
+         * result: {
+            code: 404,
+            status: 'Not Found',
+            reason: 'Unknown category key: pubdc7bb900'
+          }
+         * */
+        return res.send(result);
+      }
+
+      const ids = result.productListPage.productWindow.map(p => ({ identifier: p.id }));
+      result.productListPage.productWindow = await Client.find(ids);
+
+      res.send(result.productListPage);
     }
   })
 
