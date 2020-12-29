@@ -149,6 +149,14 @@ router
   .get('/time-to-delivery', (req, res) => {
     const deliveryDay = getDeliveryDay();
     res.send(deliveryDay);
+  })
+
+  .get('/sale/:campaign', (req, res) => {
+    const DISCOUNTS = {
+      'lost-basket': { type: 'percent', value: 5 }
+    };
+
+    res.json(DISCOUNTS[req.params.campaign]);
   });
 
 module.exports = router;
