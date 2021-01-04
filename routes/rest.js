@@ -106,7 +106,11 @@ router
       )}`
     )
       .then(response => response.json())
-      .then(json => res.send(json));
+      .then(async (json) => {
+        const ids = json.searchResultPage.productWindow.map(p => ({ identifier: p.id }));
+        const products = await Client.find(ids);
+        return res.send(products);
+      });
   })
 
   .get('/search', async (req, res) => {
