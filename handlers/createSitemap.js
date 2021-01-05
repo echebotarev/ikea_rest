@@ -3,6 +3,7 @@ const path = require('path');
 const convert = require('xml-js');
 const Client = require('./../libs/mongoClient');
 
+const leadingZero = value => (value.toString().length === 1 ? `0${value}` : value);
 const getSitemapUrls = (categories, products) => {
   // eslint-disable-next-line no-shadow
   const getUrl = ({ path, date }) => ({
@@ -18,7 +19,7 @@ const getSitemapUrls = (categories, products) => {
   });
 
   const d = new Date();
-  const date = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+  const date = `${d.getFullYear()}-${leadingZero(d.getMonth() + 1)}-${leadingZero(d.getDate())}`;
 
   const urls = [
     {
