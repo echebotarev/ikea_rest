@@ -47,7 +47,13 @@ router
 
     return fetch(url)
       .then(response => response.json())
-      .then(json => res.send(json));
+      .then(async json => {
+        const ids = json.data.map(item => ({
+          identifier: item.item_id
+        }));
+        const products = ids.length ? await Client.find(ids) : [];
+        return res.send(products);
+      });
   })
 
   .get('/same', async (req, res) => {
