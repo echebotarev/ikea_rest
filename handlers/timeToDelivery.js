@@ -9,7 +9,10 @@ function getDeliveryDay(startDay) {
   const nowDay = dayjs();
 
   if (deliveryDay.diff(nowDay, 'day') > 7) {
-    return deliveryDay.format('DD MMMM');
+    return {
+      deliveryDay: deliveryDay.format('DD MMMM'),
+      lastOrderDay: deliveryDay.subtract(8, 'day').format('DD MMMM')
+    };
   }
 
   return getDeliveryDay(deliveryDay);
