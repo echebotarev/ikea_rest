@@ -11,7 +11,7 @@ const getProducts = url =>
   new Promise((resolve, reject) => {
     fetch(url)
       .then(response => response.json())
-      .then((json) => {
+      .then(json => {
         if (json.code === 400 || json.code === 404) {
           sgMail(
             'sik.search.blue.cdtapps.com',
@@ -26,7 +26,13 @@ const getProducts = url =>
 const getQueries = payload =>
   Object.entries(payload).reduce(
     (acc, [key, value], index, array) =>
-      key === 'id' || key === 'page' || key.includes('utm_')
+      key === 'id' ||
+      key === 'page' ||
+      key.includes('utm_') ||
+      key === 'gclid' ||
+      key === 'yclid' ||
+      key === 'ymclid' ||
+      key === 'fbclid'
         ? acc
         : `${acc}${key}=${value}${index === array.length - 1 ? '' : '&'}`,
     ''
@@ -61,7 +67,11 @@ router
         `http://sik.search.blue.cdtapps.com/ru/ru/product-list-page/more-products?&category=${categoryId}&start=${start}&end=${end}&${queries}`
       );
 
-      const result = Object.assign({}, resultProducts.productListPage, resultMoreProducts.moreProducts);
+      const result = Object.assign(
+        {},
+        resultProducts.productListPage,
+        resultMoreProducts.moreProducts
+      );
       const ids = result.productWindow.map(p => ({ identifier: p.id }));
       result.productWindow = await Client.find(ids);
 
@@ -83,7 +93,9 @@ router
         return res.send(result);
       }
 
-      const ids = result.productListPage.productWindow.map(p => ({ identifier: p.id }));
+      const ids = result.productListPage.productWindow.map(p => ({
+        identifier: p.id
+      }));
       result.productListPage.productWindow = await Client.find(ids);
 
       res.send(result.productListPage);
@@ -106,8 +118,10 @@ router
       )}`
     )
       .then(response => response.json())
-      .then(async (json) => {
-        const ids = json.searchResultPage.productWindow.map(p => ({ identifier: p.id }));
+      .then(async json => {
+        const ids = json.searchResultPage.productWindow.map(p => ({
+          identifier: p.id
+        }));
         const products = await Client.find(ids);
         return res.send(products);
       });
