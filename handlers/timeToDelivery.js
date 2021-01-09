@@ -4,7 +4,8 @@ require('dayjs/locale/ru');
 dayjs.locale('ru');
 
 function getDeliveryDay(startDay) {
-  const START_DAY = '2020-12-20T00:00:00+05';
+  // в 20:00 субботы начнет показываться время следующей недели.
+  const START_DAY = '2021-01-03T20:00:00+05';
   const deliveryDay = startDay ? startDay.add(7, 'day') : dayjs(START_DAY);
   const nowDay = dayjs();
 
