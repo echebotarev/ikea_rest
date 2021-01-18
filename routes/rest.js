@@ -13,7 +13,7 @@ const getProducts = url =>
       .then(response => response.json())
       .then(json => {
         if (
-          json.reason.includes('pubdc7bb900') === false &&
+          (json.reason && json.reason.includes('pubdc7bb900') === false) &&
           (json.code === 400 ||
           json.code === 404)
         ) {
