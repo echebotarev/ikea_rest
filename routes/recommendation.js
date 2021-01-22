@@ -10,6 +10,13 @@ const Client = require('./../libs/mongoClient');
 
 const router = express.Router();
 
+const getProductsFromDB = async (data, idName) => {
+  const ids = data.length && data.map ? data.map(item => ({
+    identifier: item[idName]
+  })) : [];
+  const products = ids.length ? await Client.find(ids) : [];
+  return products;
+};
 const getRecommendedProductIds = ({ productId, filter = 'allSameCat' }) =>
   new Promise((resolve, reject) => {
     fetch(
@@ -48,10 +55,7 @@ router
     return fetch(url)
       .then(response => response.json())
       .then(async json => {
-        const ids = json.data.map(item => ({
-          identifier: item.item_id
-        }));
-        const products = ids.length ? await Client.find(ids) : [];
+        const products = await getProductsFromDB(json.data, 'item_id');
         return res.send(products);
       });
   })
@@ -64,8 +68,7 @@ router
     }
 
     const data = await getRecommendedProductIds({ productId: id });
-    const ids = data.map(item => ({ identifier: item.itemId }));
-    const products = ids.length ? await Client.find(ids) : [];
+    const products = await getProductsFromDB(data, 'itemId');
 
     res.send(products);
   })
@@ -97,10 +100,7 @@ router
       productId: id,
       type: 'series'
     });
-    const ids = data.map(item => ({
-      identifier: item.itemId
-    }));
-    const products = ids.length ? await Client.find(ids) : [];
+    const products = await getProductsFromDB(data, 'itemId');
 
     res.send(products);
   })
@@ -121,10 +121,7 @@ router
     return fetch(url)
       .then(response => response.json())
       .then(async json => {
-        const ids = json.data.map(item => ({
-          identifier: item.item_id
-        }));
-        const products = ids.length ? await Client.find(ids) : [];
+        const products = await getProductsFromDB(json.data, 'item_id');
         return res.send(products);
       });
   });
