@@ -27,6 +27,10 @@ const Client = {
    * */
   find(ids) {
     return new Promise((res, rej) => {
+      if (ids.length === 0) {
+        return res(ids);
+      }
+
       Client.db.collection(config.get('mongo:productCollectionName')).find({
         $or: ids
       }).toArray((err, docs) => {

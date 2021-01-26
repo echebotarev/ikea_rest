@@ -13,9 +13,9 @@ const getProducts = url =>
       .then(response => response.json())
       .then(json => {
         if (
-          (json.reason && json.reason.includes('pubdc7bb900') === false) &&
-          (json.code === 400 ||
-          json.code === 404)
+          json.reason &&
+          json.reason.includes('pubdc7bb900') === false &&
+          (json.code === 400 || json.code === 404)
         ) {
           sgMail(
             'sik.search.blue.cdtapps.com',
@@ -126,9 +126,12 @@ router
     )
       .then(response => response.json())
       .then(async json => {
-        const ids = json.searchResultPage.productWindow.map(p => ({
-          identifier: p.id
-        }));
+        const ids = json.searchResultPage.universalWindow
+          ? json.searchResultPage.universalWindow.map(p => {
+            return p.type === 'PRODUCT' ? { identifier: p.product.id } : { identifier: null };
+          })
+          : [];
+
         const products = await Client.find(ids);
         return res.send(products);
       });
