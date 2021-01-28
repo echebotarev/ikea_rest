@@ -4,6 +4,7 @@ const Client = require('./../libs/mongoClient');
 
 const sgMail = require('./../libs/sgmail');
 const getDeliveryDay = require('./../handlers/timeToDelivery');
+const getSearchedProducts = require('./../utils/getSearchedProducts');
 
 const router = express.Router();
 
@@ -126,11 +127,12 @@ router
     )
       .then(response => response.json())
       .then(async json => {
-        const ids = json.searchResultPage.universalWindow
-          ? json.searchResultPage.universalWindow.map(p => {
-            return p.type === 'PRODUCT' ? { identifier: p.product.id } : { identifier: null };
-          })
-          : [];
+        const data = getSearchedProducts(json);
+        const ids = data.map(p =>
+          p.type === 'PRODUCT'
+            ? { identifier: p.product.id }
+            : { identifier: null }
+        );
 
         const products = await Client.find(ids);
         return res.send(products);
