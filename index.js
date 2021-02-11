@@ -1,4 +1,3 @@
-const path = require('path');
 const express = require('express');
 const cors = require('cors');
 
@@ -16,11 +15,7 @@ const suggestion = require('./routes/suggestion');
 const recommendation = require('./routes/recommendation');
 /** ROUTES * */
 
-// const setMiddlewares = require('./libs/setMiddlewares');
-
 const app = express();
-// добавляем промежуточные ф-ии
-// setMiddlewares(app, path.join(__dirname, 'middlewares'));
 
 const corsOptions = {
   origin: true,
