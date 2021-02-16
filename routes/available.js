@@ -1,5 +1,5 @@
 const express = require('express');
-const fetch = require('node-fetch');
+const getAvailableProduct = require('../libs/getAvailableProduct');
 
 const router = express.Router();
 
@@ -16,18 +16,11 @@ router.get('/', async (req, res) => {
 
   const { type } = req.query;
   const id = req.query.id.replace('s', '');
-  const url = `https://iows.ikea.com/retail/iows/ru/ru/stores/${samaraShopId}/availability/${type}/${id}`;
-  fetch(url, {
-    headers: {
-      Authority: 'iows.ikea.com',
-      Accept: 'application/vnd.ikea.iows+json;version=1.0',
-      Origin: 'https://order.ikea.com',
-      Consumer: 'MAMMUT',
-      Contract: '37249'
-    }
-  })
-    .then(response => response.json())
-    .then(json => res.send(json));
+  const result = await getAvailableProduct({
+    shopId: samaraShopId, type, id
+  });
+
+  return res.send(result);
 });
 
 module.exports = router;
