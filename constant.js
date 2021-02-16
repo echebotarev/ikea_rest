@@ -1,4 +1,6 @@
 module.exports = {
+  internetShopId: 604,
+  samaraShopId: 442,
   categoriesDict: {
     od003: 1,
     bm001: 2,
