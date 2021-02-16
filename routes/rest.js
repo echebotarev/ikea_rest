@@ -62,6 +62,7 @@ router
     req.query.sort = req.query.sort || 'RELEVANCE';
     const queries = encodeURI(getQueries(req.query)).replace(/,/g, '%2C');
 
+    let result = {};
     if (page && page !== 1) {
       const end = page * PER_PAGE;
       const start = end - PER_PAGE;
@@ -73,7 +74,7 @@ router
         `http://sik.search.blue.cdtapps.com/ru/ru/product-list-page/more-products?&category=${categoryId}&start=${start}&end=${end}&${queries}`
       );
 
-      const result = Object.assign(
+      result = Object.assign(
         {},
         resultProducts.productListPage,
         resultMoreProducts.moreProducts
@@ -81,15 +82,14 @@ router
       const ids = result.productWindow.map(p => ({ identifier: p.id }));
       result.productWindow = await Client.find(ids);
 
-      res.send(result);
     } else {
-      const result = await getProducts(
+      const products = await getProducts(
         `https://sik.search.blue.cdtapps.com/ru/ru/product-list-page?size=24&category=${categoryId}&${queries}`
       );
 
       // const result = await getProducts('https://sik.search.blue.cdtapps.com/ru/ru/product-list-page?sessionId=a2bf2828-1b03-475f-a625-20a055042603&category=fu002&sort=PRICE_LOW_TO_HIGH&size=24&f-special-price=true&c=lf&v=20201204');
 
-      if (!result.productListPage) {
+      if (!products.productListPage) {
         /**
          * Ответ типа
          * result: {
@@ -98,16 +98,18 @@ router
             reason: 'Unknown category key: pubdc7bb900'
           }
          * */
-        return res.send(result);
+        return res.send(products);
       }
 
-      const ids = result.productListPage.productWindow.map(p => ({
+      const ids = products.productListPage.productWindow.map(p => ({
         identifier: p.id
       }));
-      result.productListPage.productWindow = await Client.find(ids);
-
-      res.send(result.productListPage);
+      result = Object.assign(products.productListPage, {
+        productWindow: await Client.find(ids)
+      });
     }
+
+    res.send(result);
   })
 
   .get('/products', async (req, res) => {
