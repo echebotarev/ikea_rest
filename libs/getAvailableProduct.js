@@ -11,7 +11,7 @@ module.exports = payload =>
      * */
 
     const { shopId = samaraShopId, type, id } = payload;
-    const url = `https://iows.ikea.com/retail/iows/ru/ru/stores/${shopId}/availability/${type}/${id}`;
+    const url = `https://iows.ikea.com/retail/iows/ru/ru/stores/${shopId}/availability/${type}/${id.replace('s', '')}`;
     fetch(url, {
       headers: {
         Authority: 'iows.ikea.com',
