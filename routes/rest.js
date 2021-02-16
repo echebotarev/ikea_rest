@@ -5,6 +5,7 @@ const Client = require('./../libs/mongoClient');
 const sgMail = require('./../libs/sgmail');
 const getDeliveryDay = require('./../handlers/timeToDelivery');
 const getSearchedProducts = require('./../utils/getSearchedProducts');
+const getAvailableProducts = require('../libs/getAvailableProduct');
 
 const router = express.Router();
 
@@ -81,7 +82,6 @@ router
       );
       const ids = result.productWindow.map(p => ({ identifier: p.id }));
       result.productWindow = await Client.find(ids);
-
     } else {
       const products = await getProducts(
         `https://sik.search.blue.cdtapps.com/ru/ru/product-list-page?size=24&category=${categoryId}&${queries}`
@@ -109,7 +109,24 @@ router
       });
     }
 
-    res.send(result);
+    let availables = result.productWindow.map(product =>
+      getAvailableProducts({
+        id: product.identifier,
+        type: product.utag.product_type
+      })
+    );
+
+    const time = Date.now();
+    availables = await Promise.allSettled(availables).then(results =>
+      results.map(result =>
+        result.status === 'rejected'
+          ? console.error(result.reason) && null
+          : result.value
+      )
+    );
+    console.log(`Time for get Availables: ${Date.now() - time} ms`);
+
+    res.send(Object.assign(result, { availables }));
   })
 
   .get('/products', async (req, res) => {
