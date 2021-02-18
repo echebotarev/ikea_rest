@@ -9,16 +9,19 @@ const Client = {
   db: null,
   findOne(id, type) {
     return new Promise((res, rej) => {
-      Client.db.collection(config.get('mongo:productCollectionName')).find({
-        itemType: type,
-        identifier: id
-      }).toArray((err, docs) => {
-        if (err) {
-          return rej(err);
-        }
+      Client.db
+        .collection(config.get('mongo:productCollectionName'))
+        .find({
+          itemType: type,
+          identifier: id
+        })
+        .toArray((err, docs) => {
+          if (err) {
+            return rej(err);
+          }
 
-        return res(docs[0]);
-      });
+          return res(docs[0]);
+        });
     });
   },
 
@@ -31,35 +34,57 @@ const Client = {
         return res(ids);
       }
 
-      Client.db.collection(config.get('mongo:productCollectionName')).find({
-        $or: ids
-      }).toArray((err, docs) => {
-        if (err) {
-          return rej(err);
-        }
+      Client.db
+        .collection(config.get('mongo:productCollectionName'))
+        .find({
+          $or: ids
+        })
+        .toArray((err, docs) => {
+          if (err) {
+            return rej(err);
+          }
 
-        return res(docs);
-      });
+          return res(docs);
+        });
+    });
+  },
+
+  findAndUpdate(filter, update, options = {}) {
+    return new Promise(async (res, rej) => {
+      const result = await Client.db
+        .collection(config.get('mongo:productCollectionName'))
+        .findOneAndUpdate(
+          filter,
+          update,
+          Object.assign({ returnNewDocument: true }, options)
+        );
+
+      res(result.value);
     });
   },
 
   get(type) {
     return new Promise((res, rej) => {
-      Client.db.collection(config.get('mongo:productCollectionName')).find({
-        itemType: type
-      }).toArray((err, docs) => {
-        if (err) {
-          return rej(err);
-        }
+      Client.db
+        .collection(config.get('mongo:productCollectionName'))
+        .find({
+          itemType: type
+        })
+        .toArray((err, docs) => {
+          if (err) {
+            return rej(err);
+          }
 
-        return res(docs);
-      });
+          return res(docs);
+        });
     });
   }
 };
 
 function getDbName(shift = 0, dbs) {
-  const date = dayjs().subtract(shift * 24, 'hour').format('DDMMYYYY');
+  const date = dayjs()
+    .subtract(shift * 24, 'hour')
+    .format('DDMMYYYY');
   const db = dbs.find(dbItem => dbItem.name.includes(date));
 
   if (db) {
@@ -77,16 +102,17 @@ MongoClient.connect(
     assert.equal(null, err);
     console.log('Connected successfully to Base');
 
-    const listDbs = await client.db('Test').admin().listDatabases();
+    const listDbs = await client
+      .db('Test')
+      .admin()
+      .listDatabases();
     const dbname = getDbName(0, listDbs.databases);
 
     Client.db = client.db(dbname);
 
     Client.db
       .collection(config.get('mongo:productCollectionName'))
-      .createIndex(
-        { identifier: 1 }
-      );
+      .createIndex({ identifier: 1 });
   }
 );
 

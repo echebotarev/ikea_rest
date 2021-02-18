@@ -21,7 +21,13 @@ module.exports = payload =>
         Contract: '37249'
       }
     })
-      .then(response => response.json())
-      .then(json => resolve(json))
+      .then(response => {
+        if (response.status !== 200) {
+          return reject();
+        }
+
+        return response.json();
+      })
+      .then(json => resolve(Object.assign(json, { id })))
       .catch(err => reject(err));
   });

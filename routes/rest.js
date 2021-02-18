@@ -110,11 +110,14 @@ router
     }
 
     let availables = result.productWindow.map(product =>
-      getAvailableProducts({
-        id: product.identifier,
-        type: product.utag.product_type
-      })
+      isNaN(product.available)
+        ? getAvailableProducts({
+            id: product.identifier,
+            type: product.utag.product_type
+          })
+        : Promise.resolve(null)
     );
+
 
     const time = Date.now();
     availables = await Promise.allSettled(availables).then(results =>
@@ -126,7 +129,47 @@ router
     );
     console.log(`Time for get Availables: ${Date.now() - time} ms`);
 
-    res.send(Object.assign(result, { availables }));
+    const timeToUpdate = Date.now();
+    let updatedProducts = availables
+      .filter(available => available)
+      .map(available =>
+        Client.findAndUpdate(
+          { identifier: available.id },
+          {
+            $set: {
+              available:
+                available.StockAvailability.RetailItemAvailability
+                  .AvailableStock.$
+            }
+          }
+        )
+      );
+    updatedProducts = await Promise.allSettled(updatedProducts).then(results =>
+      results.map(result =>
+        result.status === 'rejected'
+          ? console.error(result.reason) && null
+          : result.value
+      )
+    );
+    console.log(`Time for update products: ${Date.now() - timeToUpdate}`);
+
+    const timeToPrepare = Date.now();
+    result.productWindow = updatedProducts.length
+      ? result.productWindow.map(product =>
+          isNaN(product.available)
+            ? Object.assign(
+                product,
+                updatedProducts.find(
+                  updatedProduct =>
+                    updatedProduct.identifier === product.identifier
+                )
+              )
+            : product
+        )
+      : result.productWindow;
+    console.log(`Time for PREPARE products: ${Date.now() - timeToPrepare}`);
+
+    res.send(result);
   })
 
   .get('/products', async (req, res) => {
