@@ -5,7 +5,8 @@ const Client = require('./../libs/mongoClient');
 const sgMail = require('./../libs/sgmail');
 const getDeliveryDay = require('./../handlers/timeToDelivery');
 const getSearchedProducts = require('./../utils/getSearchedProducts');
-const getAvailableProducts = require('../libs/getAvailableProduct');
+const getAvailables = require('../libs/getAvailables');
+const updateProducts = require('../libs/updateProducts');
 
 const router = express.Router();
 
@@ -63,7 +64,7 @@ router
     req.query.sort = req.query.sort || 'RELEVANCE';
     const queries = encodeURI(getQueries(req.query)).replace(/,/g, '%2C');
 
-    let result = {};
+    let result = {}, ids = [];
     if (page && page !== 1) {
       const end = page * PER_PAGE;
       const start = end - PER_PAGE;
@@ -80,7 +81,7 @@ router
         resultProducts.productListPage,
         resultMoreProducts.moreProducts
       );
-      const ids = result.productWindow.map(p => ({ identifier: p.id }));
+      ids = result.productWindow.map(p => ({ identifier: p.id }));
       result.productWindow = await Client.find(ids);
     } else {
       const products = await getProducts(
@@ -101,7 +102,7 @@ router
         return res.send(products);
       }
 
-      const ids = products.productListPage.productWindow.map(p => ({
+      ids = products.productListPage.productWindow.map(p => ({
         identifier: p.id
       }));
       result = Object.assign(products.productListPage, {
@@ -109,64 +110,16 @@ router
       });
     }
 
-    let availables = result.productWindow.map(product =>
-      isNaN(product.available)
-        ? getAvailableProducts({
-            id: product.identifier,
-            type: product.utag.product_type
-          })
-        : Promise.resolve(null)
-    );
-
-
     const time = Date.now();
-    availables = await Promise.allSettled(availables).then(results =>
-      results.map(result =>
-        result.status === 'rejected'
-          ? console.error(result.reason) && null
-          : result.value
-      )
-    );
+    const availables = await getAvailables(result.productWindow);
     console.log(`Time for get Availables: ${Date.now() - time} ms`);
 
     const timeToUpdate = Date.now();
-    let updatedProducts = availables
-      .filter(available => available)
-      .map(available =>
-        Client.findAndUpdate(
-          { identifier: available.id },
-          {
-            $set: {
-              available:
-                available.StockAvailability.RetailItemAvailability
-                  .AvailableStock.$
-            }
-          }
-        )
-      );
-    updatedProducts = await Promise.allSettled(updatedProducts).then(results =>
-      results.map(result =>
-        result.status === 'rejected'
-          ? console.error(result.reason) && null
-          : result.value
-      )
-    );
+    await updateProducts(availables);
     console.log(`Time for update products: ${Date.now() - timeToUpdate}`);
 
     const timeToPrepare = Date.now();
-    result.productWindow = updatedProducts.length
-      ? result.productWindow.map(product =>
-          isNaN(product.available)
-            ? Object.assign(
-                product,
-                updatedProducts.find(
-                  updatedProduct =>
-                    updatedProduct.identifier === product.identifier
-                )
-              )
-            : product
-        )
-      : result.productWindow;
+    result.productWindow = await Client.find(ids);
     console.log(`Time for PREPARE products: ${Date.now() - timeToPrepare}`);
 
     res.send(result);
