@@ -2,17 +2,11 @@ const nconf = require('nconf');
 
 nconf.argv().env();
 
-if (process.env.ENV_IN === 'docker') {
-  nconf.file('docker', {
-    file: `${process.cwd()}/docker.config.json`
-  });
-}
-
 nconf.file('defaults', {
-  file: `${process.cwd()}/config.json`
+  file: `${__dirname}/../config.json`
 });
 
-nconf.set('root_path', process.cwd());
-nconf.set('public_path', `${process.cwd()}/public`);
+nconf.set('root_path', `${__dirname}/..`);
+nconf.set('public_path', `${__dirname}/../public`);
 
 module.exports = nconf;
