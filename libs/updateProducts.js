@@ -19,7 +19,7 @@ module.exports = async (availables) => {
   updatedProducts = await Promise.allSettled(updatedProducts).then(results =>
     results.map(result =>
       result.status === 'rejected'
-        ? console.error(result.reason) && null
+        ? console.error(`UpdateProducts err: ${result.reason}`) && null
         : result.value
     )
   );
