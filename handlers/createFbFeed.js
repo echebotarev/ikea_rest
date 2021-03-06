@@ -4,7 +4,7 @@ const convert = require('xml-js');
 
 const Client = require('./../libs/mongoClient');
 
-const { categoriesDict } = require('./../constant');
+const { categoriesDict, googleCategoriesIdDict } = require('./../constant');
 
 const getPrice = require('./../handlers/price');
 
@@ -84,7 +84,8 @@ const getItem = product => {
     },
     'g:image_link': {
       _text: getPictures(product.images.fullMediaList)[0]
-    }
+    },
+    'g:google_product_category': googleCategoriesIdDict[product.utag.category] || null
   };
 };
 
