@@ -49,9 +49,7 @@ const getItem = product => {
   const getPictures = images =>
     images
       .filter(image => image.type === 'image')
-      .map(image => ({
-        _text: image.content.url
-      }));
+      .map(image => image.content.url);
 
   let id = getIdFromUrl(getParent(product.breadcrumbs).item);
   id = categoriesDict[id] ? categoriesDict[id] : id;
