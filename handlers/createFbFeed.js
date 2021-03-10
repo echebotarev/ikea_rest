@@ -83,7 +83,8 @@ const getItem = product => {
     'g:image_link': {
       _text: getPictures(product.images.fullMediaList)[0]
     },
-    'g:google_product_category': googleCategoriesIdDict[product.utag.category] || null
+    'g:google_product_category': googleCategoriesIdDict[product.utag.category] || null,
+    'g:brand': 'IKEA'
   };
 };
 
