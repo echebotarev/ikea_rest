@@ -1,13 +1,14 @@
 const express = require('express');
+
+const getAvailable = require('./../libs/getAvailable');
 const getAvailableProduct = require('../libs/getAvailableProduct');
 const updateProducts = require('../libs/updateProducts');
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const { type } = req.query;
-  const id = req.query.id.replace('s', '');
-  const result = await getAvailableProduct({ type, id });
+  const { type, id } = req.query;
+  const result = await getAvailable({ type, id });
 
   return res.send(result);
 })
@@ -16,7 +17,7 @@ router.get('/', async (req, res) => {
     const { productId } = req.params;
     const result = await getAvailableProduct({ type, id: productId });
 
-    updateProducts([result]);
+    await updateProducts([result]);
 
     res.send('Ok');
   });
