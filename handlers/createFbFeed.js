@@ -8,6 +8,7 @@ const { categoriesDict, googleCategoriesIdDict } = require('./../constant');
 
 const getPrice = require('./../handlers/price');
 
+const timeout = async shift => new Promise(resolve => setTimeout(() => resolve(), shift));
 const getItem = product => {
   const getIdFromUrl = (url, separator = '-') => {
     if (!url) {
@@ -164,10 +165,15 @@ const createFbFeed = async (minPrice = 0, maxPrice = 0) => {
 setTimeout(async () => {
   await createFbFeed();
   await createFbFeed(0, 5000);
+  await timeout(1000);
   await createFbFeed(5000, 10000);
+  await timeout(1000);
   await createFbFeed(10000, 20000);
+  await timeout(1000);
   await createFbFeed(20000, 30000);
+  await timeout(1000);
   await createFbFeed(30000, 50000);
+  await timeout(1000);
   await createFbFeed(50000, 10000000);
 
   setTimeout(() => process.exit(), 10000);
