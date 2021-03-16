@@ -83,12 +83,13 @@ const getItem = product => {
     'g:image_link': {
       _text: getPictures(product.images.fullMediaList)[0]
     },
-    'g:google_product_category': googleCategoriesIdDict[product.utag.category] || null,
+    'g:google_product_category':
+      googleCategoriesIdDict[product.utag.category] || null,
     'g:brand': 'IKEA'
   };
 };
 
-const createFbFeed = async () => {
+const createFbFeed = async (minPrice = 0, maxPrice = 0) => {
   const products = await Client.get('product');
 
   const result = convert.json2xml(
@@ -114,20 +115,26 @@ const createFbFeed = async () => {
             _text: 'Сервис по доставке IKEA прямо к вам домой'
           },
           item: (products => {
-            const output = [];
+            return products
+              .map(product => getItem(product))
+              .filter(offer => {
+                if (
+                  offer &&
+                  offer['g:description']._text &&
+                  offer['g:image_link']
+                ) {
+                  if (minPrice || maxPrice) {
+                    return (
+                      parseInt(offer['g:price']._text) > minPrice &&
+                      parseInt(offer['g:price']._text) <= maxPrice
+                    );
+                  }
 
-            products.map((product) => {
-              const offer = getItem(product);
-              if (
-                offer &&
-                offer['g:description']._text &&
-                offer['g:image_link']
-              ) {
-                output.push(offer);
-              }
-            });
+                  return true;
+                }
 
-            return output;
+                return false;
+              });
           })(products)
         }
       }
@@ -135,8 +142,13 @@ const createFbFeed = async () => {
     { compact: true, spaces: 4 }
   );
 
+  let fileName = 'fb_feed_aktau';
+  if (minPrice || maxPrice) {
+    fileName = `${fileName}-minPrice-${minPrice}-maxPrice-${maxPrice}`;
+  }
+
   fs.writeFile(
-    path.join(__dirname, '../static', 'fb_feed_aktau.xml'),
+    path.join(__dirname, '../static', `${fileName}.xml`),
     result,
     err => {
       if (err) {
@@ -144,11 +156,19 @@ const createFbFeed = async () => {
       }
 
       console.log('Ok');
-      return process.exit();
+      return true;
     }
   );
 };
 
 setTimeout(async () => {
   await createFbFeed();
+  await createFbFeed(0, 5000);
+  await createFbFeed(5000, 10000);
+  await createFbFeed(10000, 20000);
+  await createFbFeed(20000, 30000);
+  await createFbFeed(30000, 50000);
+  await createFbFeed(50000, 10000000);
+
+  setTimeout(() => process.exit(), 10000);
 }, 2000);
