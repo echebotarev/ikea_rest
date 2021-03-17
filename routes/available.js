@@ -1,7 +1,6 @@
 const express = require('express');
 
 const getAvailable = require('./../libs/getAvailable');
-const getAvailableProduct = require('../libs/getAvailableProduct');
 const updateProducts = require('../libs/updateProducts');
 
 const router = express.Router();
@@ -12,10 +11,9 @@ router.get('/', async (req, res) => {
 
   return res.send(result);
 })
-  .put('/:type/:productId', async (req, res) => {
-    const { type } = req.params;
-    const { productId } = req.params;
-    const result = await getAvailableProduct({ type, id: productId });
+  .put('/:type/:id', async (req, res) => {
+    const { type, id } = req.params;
+    const result = await getAvailable({ type, id });
 
     await updateProducts([result]);
 
