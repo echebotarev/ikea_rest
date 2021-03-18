@@ -5,7 +5,7 @@ const Client = require('./../libs/mongoClient');
 const sgMail = require('./../libs/sgmail');
 const getDeliveryDay = require('./../handlers/timeToDelivery');
 const getSearchedProducts = require('./../utils/getSearchedProducts');
-const getAvailables = require('../libs/getAvailables');
+const getAvailable = require('../libs/getAvailable');
 const updateProducts = require('../libs/updateProducts');
 
 const router = express.Router();
@@ -111,7 +111,7 @@ router
     }
 
     const time = Date.now();
-    const availables = await getAvailables(result.productWindow);
+    const availables = await getAvailable(result.productWindow);
     console.log(`Time for get Availables: ${Date.now() - time} ms`);
 
     const timeToUpdate = Date.now();
