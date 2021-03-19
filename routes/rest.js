@@ -7,6 +7,7 @@ const getDeliveryDay = require('./../handlers/timeToDelivery');
 const getSearchedProducts = require('./../utils/getSearchedProducts');
 const getAvailable = require('../libs/getAvailable');
 const updateProducts = require('../libs/updateProducts');
+const mergeProductsWithAvailables = require('../utils/mergeProductsWithAvailables');
 
 const router = express.Router();
 
@@ -114,13 +115,7 @@ router
     const availables = await getAvailable(result.productWindow);
     console.log(`Time for get Availables: ${Date.now() - time} ms`);
 
-    const timeToUpdate = Date.now();
-    await updateProducts(availables);
-    console.log(`Time for update products: ${Date.now() - timeToUpdate}`);
-
-    const timeToPrepare = Date.now();
-    result.productWindow = await Client.find(ids);
-    console.log(`Time for PREPARE products: ${Date.now() - timeToPrepare}`);
+    result.productWindow = mergeProductsWithAvailables(result.productWindow, availables);
 
     res.send(result);
   })
