@@ -130,11 +130,9 @@ router
   })
 
   .get('/search/products', async (req, res) => {
-    fetch(
-      `https://sik.search.blue.cdtapps.com/ru/ru/search-result-page?q=${encodeURI(
-        req.query.q
-      )}`
-    )
+    let url = `https://sik.search.blue.cdtapps.com/ru/ru/search-result-page?max-num-filters=8&q=${encodeURI(req.query.q)}&autocorrect=true&size=96&columns=4&store=442&subcategories-style=tree-navigation&columns=%26columns%3D4&types=&c=sr&v=20210317`;
+
+    fetch(url)
       .then(response => response.json())
       .then(async json => {
         const data = getSearchedProducts(json);
