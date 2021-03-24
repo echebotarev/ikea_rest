@@ -10,11 +10,21 @@ const Client = require('./../libs/mongoClient');
 
 const router = express.Router();
 
+const getAvailable = require('../libs/getAvailable');
+const mergeProductsWithAvailables = require('../utils/mergeProductsWithAvailables');
+
 const getProductsFromDB = async (data, idName) => {
   const ids = data.length && data.map ? data.map(item => ({
     identifier: item[idName]
   })) : [];
-  const products = ids.length ? await Client.find(ids) : [];
+  let products = ids.length ? await Client.find(ids) : [];
+
+  const time = Date.now();
+  const availables = await getAvailable(products);
+  console.log(`Time for get Availables: ${Date.now() - time} ms`);
+
+  products = mergeProductsWithAvailables(products, availables);
+
   return products;
 };
 const getRecommendedProductIds = ({ productId, filter = 'allSameCat' }) =>
@@ -81,10 +91,7 @@ router
     }
 
     const data = await getRecommendedProductIdsByUrlScheme({ productId: id });
-    const ids = data.data.recommended.map(item => ({
-      identifier: item.itemId
-    }));
-    const products = ids.length ? await Client.find(ids) : [];
+    const products = getProductsFromDB(data.data.recommended, 'itemId');
 
     res.send(products);
   })

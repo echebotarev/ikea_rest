@@ -11,7 +11,7 @@ const apiClient = axios.create({
 
 module.exports = async payload => {
   if (Array.isArray(payload)) {
-    return await apiClient
+    return payload.length === 0 ? payload : await apiClient
       .post('/products', { products: payload })
       .then(response => (response.data ? response.data : []));
   } else {
