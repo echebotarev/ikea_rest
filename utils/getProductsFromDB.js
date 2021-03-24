@@ -4,9 +4,13 @@ const getAvailable = require('../libs/getAvailable');
 const mergeProductsWithAvailables = require('../utils/mergeProductsWithAvailables');
 
 module.exports = async (data, idName) => {
-  const ids = data.length && data.map ? data.map(item => ({
-    identifier: item[idName]
-  })) : [];
+  const ids = idName
+    ? data.length && data.map
+      ? data.map(item => ({
+          identifier: item[idName]
+        }))
+      : []
+    : data;
   let products = ids.length ? await Client.find(ids) : [];
 
   const time = Date.now();

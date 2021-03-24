@@ -15,7 +15,7 @@ router
   .get('/:productId', async (req, res) => {
     const { productId } = req.params;
     const { data } = await getSuggestionProductsId(productId);
-    const products = getProductsFromDB(data, 'id');
+    const products = await getProductsFromDB(data, 'id');
 
     res.send(products);
   });

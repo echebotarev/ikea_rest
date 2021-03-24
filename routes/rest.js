@@ -8,6 +8,7 @@ const getSearchedProducts = require('./../utils/getSearchedProducts');
 const getAvailable = require('../libs/getAvailable');
 const updateProducts = require('../libs/updateProducts');
 const mergeProductsWithAvailables = require('../utils/mergeProductsWithAvailables');
+const getProductsFromDB = require('./../utils/getProductsFromDB');
 
 const router = express.Router();
 
@@ -142,7 +143,8 @@ router
             : { identifier: null }
         );
 
-        const products = await Client.find(ids);
+        const products = await getProductsFromDB(ids);
+
         return res.send(products);
       });
   })
