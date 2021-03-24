@@ -6,8 +6,16 @@ const dayjs = require('dayjs');
 const Client = require('./../libs/mongoClient');
 
 const getPrice = require('./../handlers/price');
+const getAvailable = require('./../libs/getAvailable');
+const timeout = require('./../libs/timeout');
 
-const getOffer = product => {
+const getOffer = async product => {
+  const available = await getAvailable({
+    type: product.utag.product_type,
+    id: product.identifier
+  });
+  const availableValue = available.StockAvailability && available.StockAvailability.RetailItemAvailability && parseInt(available.StockAvailability.RetailItemAvailability.AvailableStock['@']) ? 'yes' : 'no';
+
   return {
     _attributes: {
       sku: product.identifier
@@ -18,12 +26,33 @@ const getOffer = product => {
     brand: { _text: 'IKEA' },
     price: {
       _text: getPrice(product.price.price.mainPriceProps.price.integer)
+    },
+    availabilities: {
+      availability: {
+        _attributes: {
+          storeId: 'PP1',
+          available: availableValue
+        }
+      }
     }
   };
+};
+const getOffers = async (products, acc = []) => {
+  if (products.length === 0) {
+    return acc;
+  }
+
+  const result = await getOffer(products.splice(0, 1)[0]);
+  await timeout(300);
+
+  acc.push(result);
+  // eslint-disable-next-line no-return-await
+  return await getOffers(products, acc);
 };
 
 const createKaspiKzFeed = async () => {
   const products = await Client.get('product');
+  const offers = await getOffers(products);
   const result = convert.json2xml(
     {
       _declaration: {
@@ -44,23 +73,7 @@ const createKaspiKzFeed = async () => {
         },
         company: { _text: 'Doma-Doma' },
         merchantid: { _text: 'Domadoma' },
-        offers: {
-          // проверяем существует ли такая категория
-          // есть ли изображения и описание
-          // eslint-disable-next-line no-shadow
-          offer: (products => {
-            const output = [];
-
-            products.map(product => {
-              const offer = getOffer(product);
-              if (offer) {
-                output.push(offer);
-              }
-            });
-
-            return output;
-          })(products)
-        }
+        offers
       }
     },
     { compact: true, spaces: 4 }
