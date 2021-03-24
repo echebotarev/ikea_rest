@@ -14,7 +14,15 @@ const getOffer = async product => {
     type: product.utag.product_type,
     id: product.identifier
   });
-  const availableValue = available.StockAvailability && available.StockAvailability.RetailItemAvailability && parseInt(available.StockAvailability.RetailItemAvailability.AvailableStock['@']) ? 'yes' : 'no';
+  const availableValue =
+    available.StockAvailability &&
+    available.StockAvailability.RetailItemAvailability &&
+    parseInt(
+      available.StockAvailability.RetailItemAvailability.AvailableStock['@'],
+      10
+    )
+      ? 'yes'
+      : 'no';
 
   return {
     _attributes: {
@@ -43,7 +51,7 @@ const getOffers = async (products, acc = []) => {
   }
 
   const result = await getOffer(products.splice(0, 1)[0]);
-  await timeout(300);
+  await timeout(100);
 
   acc.push(result);
   // eslint-disable-next-line no-return-await
