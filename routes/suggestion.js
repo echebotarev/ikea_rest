@@ -1,6 +1,6 @@
 const express = require('express');
 const fetch = require('node-fetch');
-const Client = require('./../libs/mongoClient');
+const getProductsFromDB = require('./../utils/getProductsFromDB');
 
 const router = express.Router();
 
@@ -15,8 +15,7 @@ router
   .get('/:productId', async (req, res) => {
     const { productId } = req.params;
     const { data } = await getSuggestionProductsId(productId);
-    const ids = data.map(item => ({ identifier: item.id }));
-    const products = ids.length ? await Client.find(ids) : [];
+    const products = getProductsFromDB(data, 'id');
 
     res.send(products);
   });
