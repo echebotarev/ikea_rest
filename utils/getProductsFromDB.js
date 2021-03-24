@@ -15,7 +15,7 @@ module.exports = async (data, idName) => {
 
   const time = Date.now();
   const availables = await getAvailable(products);
-  console.log(`Time for get Availables: ${Date.now() - time} ms`);
+  console.log(`Time for get Availables ${products.length} items: ${Date.now() - time} ms`);
 
   products = mergeProductsWithAvailables(products, availables);
 
