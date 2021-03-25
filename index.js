@@ -23,7 +23,12 @@ app.use('/api/v1/available', cors(corsOptions), available);
 app.use('/api/v1/suggestion', cors(corsOptions), suggestion);
 app.use('/api/v1/recommendation', cors(corsOptions), recommendation);
 
-app.use('/api/v1/static', express.static('static'));
+app.use(
+  '/api/v1/static',
+  express.static('static', {
+    etag: false
+  })
+);
 
 app.listen(config.get('port'), () => {
   console.log(`Listening on port ${config.get('port')}!`);
