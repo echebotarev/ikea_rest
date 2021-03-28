@@ -1,5 +1,5 @@
 const KZT = 6;
-const percent = 35;
+const percent = 40;
 
 const getPrice = (num) => {
   if (typeof num === 'string') {
