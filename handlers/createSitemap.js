@@ -8,7 +8,7 @@ const getSitemapUrls = (categories, products) => {
   // eslint-disable-next-line no-shadow
   const getUrl = ({ path, date }) => ({
     loc: {
-      _text: `https://doma-doma.kz/${path}`
+      _text: `https://doma-doma.org/${path}`
     },
     lastmod: {
       _text: date
@@ -24,7 +24,7 @@ const getSitemapUrls = (categories, products) => {
   const urls = [
     {
       loc: {
-        _text: 'https://doma-doma.kz/'
+        _text: 'https://doma-doma.org/'
       },
       lastmod: {
         _text: date

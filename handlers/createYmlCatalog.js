@@ -127,7 +127,7 @@ const getOffer = product => {
       _text: `${product.price.productDescription}, IKEA, ${product.price.productName}, ${product.price.measurementText}`
     },
     url: {
-      _text: `https://doma-doma.kz/product/${product.identifier}`
+      _text: `https://doma-doma.org/product/${product.identifier}`
     },
     price: {
       _text: getPrice(product.price.price.mainPriceProps.price.integer)
@@ -166,13 +166,13 @@ const createYmlCatalog = async () => {
         },
         shop: {
           name: {
-            _text: 'Doma-Doma.kz'
+            _text: 'Doma-Doma.org'
           },
           company: {
             _text: 'ИП Егор Чеботарев'
           },
           url: {
-            _text: 'https://doma-doma.kz/'
+            _text: 'https://doma-doma.org/'
           },
           currencies: {
             currency: {

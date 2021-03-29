@@ -67,7 +67,7 @@ const getItem = product => {
       _text: `${product.price.productDescription}, IKEA, ${product.price.productName}, ${product.price.measurementText}`
     },
     'g:link': {
-      _text: `https://doma-doma.kz/product/${product.identifier}`
+      _text: `https://doma-doma.org/product/${product.identifier}`
     },
     'g:price': {
       _text: `${getPrice(product.price.price.mainPriceProps.price.integer)} KZT`
@@ -107,10 +107,10 @@ const createFbFeed = async (minPrice = 0, maxPrice = 0) => {
         },
         channel: {
           title: {
-            _text: 'Doma-Doma.kz'
+            _text: 'Doma-Doma.org'
           },
           link: {
-            _text: 'https://doma-doma.kz/'
+            _text: 'https://doma-doma.org/'
           },
           description: {
             _text: 'Сервис по доставке IKEA прямо к вам домой'
