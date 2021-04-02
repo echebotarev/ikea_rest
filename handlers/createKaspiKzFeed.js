@@ -81,7 +81,9 @@ const createKaspiKzFeed = async () => {
         },
         company: { _text: 'Doma-Doma' },
         merchantid: { _text: 'Domadoma' },
-        offers
+        offers: {
+          offer: offers
+        }
       }
     },
     { compact: true, spaces: 4 }
