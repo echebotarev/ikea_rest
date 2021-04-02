@@ -35,12 +35,10 @@ const getOffer = async product => {
     price: {
       _text: getPrice(product.price.price.mainPriceProps.price.integer)
     },
-    availabilities: {
-      availability: {
-        _attributes: {
-          storeId: 'PP1',
-          available: availableValue
-        }
+    availability: {
+      _attributes: {
+        storeId: 'PP1',
+        available: availableValue
       }
     }
   };
