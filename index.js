@@ -39,10 +39,8 @@ app.use(
     etag: false,
     // eslint-disable-next-line no-shadow
     setHeaders(res, path, stat) {
-      console.log('Path', path);
-      console.log('Stat', stat);
-
-      res.set('x-timestamp', Date.now());
+      res.set('Content-Length', stat.size);
+      res.set('Content-Type', 'text/xml;charset=UTF-8');
     }
   })
 );
