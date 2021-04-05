@@ -2,11 +2,12 @@ const express = require('express');
 const fetch = require('node-fetch');
 const Client = require('./../libs/mongoClient');
 
+const { samaraShopId } = require('./../constant');
+
 const sgMail = require('./../libs/sgmail');
 const getDeliveryDay = require('./../handlers/timeToDelivery');
 const getSearchedProducts = require('./../utils/getSearchedProducts');
 const getAvailable = require('../libs/getAvailable');
-const updateProducts = require('../libs/updateProducts');
 const mergeProductsWithAvailables = require('../utils/mergeProductsWithAvailables');
 const getProductsFromDB = require('./../utils/getProductsFromDB');
 
@@ -61,6 +62,7 @@ router
   .get('/products/:categoryId', async (req, res) => {
     const PER_PAGE = 24;
     const { categoryId } = req.params;
+    const { ikeaShopId = samaraShopId } = req.cookies;
     const page = parseInt(req.query.page, 10);
 
     req.query.sort = req.query.sort || 'RELEVANCE';
@@ -113,7 +115,7 @@ router
     }
 
     const time = Date.now();
-    const availables = await getAvailable(result.productWindow);
+    const availables = await getAvailable({ products: result.productWindow, ikeaShopId });
     console.log(`Time for get Availables: ${Date.now() - time} ms`);
 
     result.productWindow = mergeProductsWithAvailables(result.productWindow, availables);

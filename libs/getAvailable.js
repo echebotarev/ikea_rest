@@ -10,14 +10,19 @@ const apiClient = axios.create({
 });
 
 module.exports = async payload => {
-  if (Array.isArray(payload)) {
-    return payload.length === 0 ? payload : await apiClient
-      .post('/products', { products: payload })
-      .then(response => (response.data ? response.data : []));
+  if (Array.isArray(payload.products)) {
+    return payload.products.length === 0
+      ? payload.products
+      : await apiClient
+          .post('/products', {
+            products: payload.products,
+            ikeaShopId: payload.ikeaShopId
+          })
+          .then(response => (response.data ? response.data : []));
   } else {
-    const { type, id } = payload;
+    const { type, id, ikeaShopId, shopId } = payload;
     return await apiClient
-      .get(`/product?type=${type}&id=${id}`)
+      .get(`/product?type=${type}&id=${id}&ikeaShopId=${ikeaShopId || shopId}`)
       .then(response => (response.data ? response.data : {}));
   }
 };

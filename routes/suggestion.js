@@ -1,6 +1,7 @@
 const express = require('express');
 const fetch = require('node-fetch');
 const getProductsFromDB = require('./../utils/getProductsFromDB');
+const { samaraShopId } = require('./../constant');
 
 const router = express.Router();
 
@@ -14,8 +15,9 @@ const getSuggestionProductsId = productId => new Promise((resolve, reject) => {
 router
   .get('/:productId', async (req, res) => {
     const { productId } = req.params;
+    const { ikeaShopId = samaraShopId } = req.cookies;
     const { data } = await getSuggestionProductsId(productId);
-    const products = await getProductsFromDB(data, 'id');
+    const products = await getProductsFromDB(data, 'id', ikeaShopId);
 
     res.send(products);
   });

@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 
+const path = require('path');
+
 const config = require('./libs/config');
 
 /** ROUTES * */
@@ -11,11 +13,17 @@ const suggestion = require('./routes/suggestion');
 const recommendation = require('./routes/recommendation');
 /** ROUTES * */
 
+const setMiddlewares = require('./libs/setMiddlewares');
+
 const app = express();
+
+// добавляем промежуточные ф-ии
+setMiddlewares(app, path.join(__dirname, 'middlewares'));
 
 const corsOptions = {
   origin: true,
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
+  credentials: true
 };
 
 app.get('/', (req, res) => res.end('API is Ok'));

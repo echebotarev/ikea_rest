@@ -7,6 +7,8 @@
 const express = require('express');
 const fetch = require('node-fetch');
 
+const { samaraShopId } = require('./../constant');
+
 const router = express.Router();
 
 const getProductsFromDB = require('./../utils/getProductsFromDB');
@@ -35,6 +37,7 @@ const getRecommendedProductIdsByUrlScheme = ({ productId, type = 'style' }) =>
 router
   .get('/similar', async (req, res) => {
     const { id } = req.query;
+    const { ikeaShopId = samaraShopId } = req.cookies;
     const { categoryList } = req.query;
 
     if (!id || !categoryList) {
@@ -49,39 +52,42 @@ router
     return fetch(url)
       .then(response => response.json())
       .then(async json => {
-        const products = await getProductsFromDB(json.data, 'item_id');
+        const products = await getProductsFromDB(json.data, 'item_id', ikeaShopId);
         return res.send(products);
       });
   })
 
   .get('/same', async (req, res) => {
     const { id } = req.query;
+    const { ikeaShopId = samaraShopId } = req.cookies;
 
     if (!id) {
       return res.send([]);
     }
 
     const data = await getRecommendedProductIds({ productId: id });
-    const products = await getProductsFromDB(data, 'itemId');
+    const products = await getProductsFromDB(data, 'itemId', ikeaShopId);
 
     res.send(products);
   })
 
   .get('/style', async (req, res) => {
     const { id } = req.query;
+    const { ikeaShopId = samaraShopId } = req.cookies;
 
     if (!id) {
       return res.send([]);
     }
 
     const data = await getRecommendedProductIdsByUrlScheme({ productId: id });
-    const products = getProductsFromDB(data.data.recommended, 'itemId');
+    const products = getProductsFromDB(data.data.recommended, 'itemId', ikeaShopId);
 
     res.send(products);
   })
 
   .get('/series', async (req, res) => {
     const { id } = req.query;
+    const { ikeaShopId = samaraShopId } = req.cookies;
 
     if (!id) {
       return res.send([]);
@@ -91,13 +97,14 @@ router
       productId: id,
       type: 'series'
     });
-    const products = await getProductsFromDB(data, 'itemId');
+    const products = await getProductsFromDB(data, 'itemId', ikeaShopId);
 
     res.send(products);
   })
 
   .get('/trending', async (req, res) => {
     const { id } = req.query;
+    const { ikeaShopId = samaraShopId } = req.cookies;
     const { categoryList } = req.query;
 
     if (!id || !categoryList) {
@@ -112,7 +119,7 @@ router
     return fetch(url)
       .then(response => response.json())
       .then(async json => {
-        const products = await getProductsFromDB(json.data, 'item_id');
+        const products = await getProductsFromDB(json.data, 'item_id', ikeaShopId);
         return res.send(products);
       });
   });
