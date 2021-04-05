@@ -36,7 +36,14 @@ app.use('/download', download);
 app.use(
   '/api/v1/static',
   express.static('static', {
-    etag: false
+    etag: false,
+    // eslint-disable-next-line no-shadow
+    setHeaders(res, path, stat) {
+      console.log('Path', path);
+      console.log('Stat', stat);
+
+      res.set('x-timestamp', Date.now());
+    }
   })
 );
 
