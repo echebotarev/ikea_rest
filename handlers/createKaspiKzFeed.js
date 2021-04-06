@@ -32,9 +32,6 @@ const getOffer = async product => {
       _text: `${product.price.productDescription}, IKEA, ${product.price.productName}, ${product.price.measurementText}`
     },
     brand: { _text: 'IKEA' },
-    price: {
-      _text: getPrice(product.price.price.mainPriceProps.price.integer)
-    },
     availabilities: {
       availability: {
         _attributes: {
@@ -42,6 +39,9 @@ const getOffer = async product => {
           available: availableValue
         }
       }
+    },
+    price: {
+      _text: getPrice(product.price.price.mainPriceProps.price.integer)
     }
   };
 };
