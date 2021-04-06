@@ -35,8 +35,8 @@ const getOffer = async product => {
     availabilities: {
       availability: {
         _attributes: {
-          storeId: 'PP1',
-          available: availableValue
+          available: 'yes',
+          storeId: 'PP1'
         }
       }
     },
