@@ -11,9 +11,11 @@ const getDeliveryDay = {
     const nowDay = dayjs();
 
     if (deliveryDay.diff(nowDay, 'day') > 7) {
+      const lastOrderDay = deliveryDay.subtract(8, 'day');
       return {
         deliveryDay: deliveryDay.format('DD MMMM'),
-        lastOrderDay: deliveryDay.subtract(8, 'day').format('DD MMMM')
+        lastOrderDay: lastOrderDay.format('DD MMMM'),
+        lastOrderDayRawData: lastOrderDay.format()
       };
     }
 
@@ -57,7 +59,8 @@ const getDeliveryDay = {
     return {
       // вторник-пятница
       deliveryDay: getDay(lastOrderDay, [2, 5]).format('DD MMMM'),
-      lastOrderDay: lastOrderDay.format('DD MMMM')
+      lastOrderDay: lastOrderDay.format('DD MMMM'),
+      lastOrderDayRawData: lastOrderDay.format()
     };
   }
 };
