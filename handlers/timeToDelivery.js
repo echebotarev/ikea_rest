@@ -1,17 +1,29 @@
 const dayjs = require('dayjs');
 require('dayjs/locale/ru');
 
+const utc = require('dayjs/plugin/utc'); // dependent on utc plugin
+const timezone = require('dayjs/plugin/timezone');
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 dayjs.locale('ru');
 
 const getDeliveryDay = {
   '001': startDay => {
     // в 00:00 субботы начнет показываться время следующей недели.
     const START_DAY = '2021-04-18T17:00:00+05';
-    const deliveryDay = startDay ? startDay.add(7, 'day') : dayjs(START_DAY);
+    const deliveryDay = startDay
+      ? startDay.add(7, 'day')
+      : dayjs(START_DAY).tz('Asia/Aqtau');
     const nowDay = dayjs();
 
     if (deliveryDay.diff(nowDay, 'day') > 7) {
-      const lastOrderDay = deliveryDay.subtract(8, 'day');
+      let lastOrderDay = deliveryDay.subtract(8, 'day');
+      lastOrderDay = dayjs(
+        `${lastOrderDay.format('YYYY-MM-DD')} 17:00`
+      ).tz('Asia/Aqtau');
+
       return {
         deliveryDay: deliveryDay.format('DD MMMM'),
         lastOrderDay: lastOrderDay.format('DD MMMM'),
@@ -23,7 +35,7 @@ const getDeliveryDay = {
   },
 
   '002': () => {
-    const nowDay = dayjs();
+    const nowDay = dayjs().tz('Europe/Moscow');
     const getDay = (input, days) => {
       const day = input.format('d');
       if (days.includes(Number(day))) {
@@ -33,8 +45,8 @@ const getDeliveryDay = {
       return getDay(input.add(1, 'day'), days);
     };
     const lastTimeToOrder = {
-      3: 'T19:00:00+05',
-      6: 'T15:00:00+05'
+      3: 'T19:00:00+03',
+      6: 'T15:00:00+03'
     };
 
     // среда-суббота
@@ -55,6 +67,13 @@ const getDeliveryDay = {
         lastOrderDay = getDay(lastOrderDay.add(1, 'day'), [3, 6]);
       }
     }
+
+    // преобразовываем в конкретное время
+    lastOrderDay = dayjs(
+      `${lastOrderDay.format('YYYY-MM-DD')}${
+        lastTimeToOrder[lastOrderDay.format('d')]
+      }`
+    ).tz('Europe/Moscow');
 
     return {
       // вторник-пятница
