@@ -2,7 +2,7 @@ const express = require('express');
 const fetch = require('node-fetch');
 const Client = require('./../libs/mongoClient');
 
-const { samaraShopId } = require('./../constant');
+const { samaraShopId, aktauShopId } = require('./../constant');
 
 const sgMail = require('./../libs/sgmail');
 const getDeliveryDay = require('./../handlers/timeToDelivery');
@@ -162,7 +162,9 @@ router
   })
 
   .get('/time-to-delivery', (req, res) => {
-    const deliveryDay = getDeliveryDay['001']();
+    const { domaDomaShopId = aktauShopId } = req.cookies;
+
+    const deliveryDay = getDeliveryDay[domaDomaShopId]();
     res.send(deliveryDay);
   })
 
