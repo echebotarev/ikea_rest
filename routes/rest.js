@@ -162,7 +162,7 @@ router
   })
 
   .get('/time-to-delivery', (req, res) => {
-    const deliveryDay = getDeliveryDay();
+    const deliveryDay = getDeliveryDay['001']();
     res.send(deliveryDay);
   })
 
