@@ -45,7 +45,7 @@ const getDeliveryDay = {
       return getDay(input.add(1, 'day'), days);
     };
     const lastTimeToOrder = {
-      3: 'T15:00:00+03',
+      3: 'T16:00:00+03',
       6: 'T12:00:00+03'
     };
 
