@@ -27,6 +27,8 @@ const getDeliveryDay = {
       return {
         deliveryDay: deliveryDay.format('DD MMMM'),
         lastOrderDay: lastOrderDay.format('DD MMMM'),
+        shoppingDayRawData: lastOrderDay.add(1, 'day').format(),
+        deliveryDayRawData: deliveryDay.format(),
         lastOrderDayRawData: lastOrderDay.format()
       };
     }
@@ -75,10 +77,14 @@ const getDeliveryDay = {
       }`
     ).tz('Europe/Moscow');
 
+    // вторник-пятница
+    const deliveryDay = getDay(lastOrderDay, [2, 5]);
+
     return {
-      // вторник-пятница
-      deliveryDay: getDay(lastOrderDay, [2, 5]).format('DD MMMM'),
+      deliveryDay: deliveryDay.format('DD MMMM'),
       lastOrderDay: lastOrderDay.format('DD MMMM'),
+      shoppingDayRawData: getDay(lastOrderDay, [1, 4]).format(),
+      deliveryDayRawData: deliveryDay.format(),
       lastOrderDayRawData: lastOrderDay.format()
     };
   }
