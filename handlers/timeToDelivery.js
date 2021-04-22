@@ -21,8 +21,8 @@ const getDeliveryDay = {
     if (deliveryDay.diff(nowDay, 'day') > 7) {
       let lastOrderDay = deliveryDay.subtract(8, 'day');
       lastOrderDay = dayjs(
-        `${lastOrderDay.format('YYYY-MM-DD')} 17:00`
-      );
+        `${lastOrderDay.format('YYYY-MM-DD')} 12:00`
+      ).tz('Asia/Aqtau');
 
       return {
         deliveryDay: deliveryDay.format('DD MMMM'),
