@@ -75,7 +75,7 @@ const getDeliveryDay = {
       `${lastOrderDay.format('YYYY-MM-DD')}${
         lastTimeToOrder[lastOrderDay.format('d')]
       }`
-    );
+    ).tz('Europe/Moscow');
 
     // вторник-пятница
     const deliveryDay = getDay(lastOrderDay, [2, 5]);
