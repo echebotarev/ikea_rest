@@ -47,8 +47,8 @@ const getDeliveryDay = {
       return getDay(input.add(1, 'day'), days);
     };
     const lastTimeToOrder = {
-      3: 'T19:00:00+03',
-      6: 'T15:00:00+03'
+      3: ' 16:00',
+      6: ' 12:00'
     };
 
     // среда-суббота
