@@ -15,19 +15,19 @@ const getDeliveryDay = {
     const START_DAY = '2021-04-18T17:00:00+05';
     const deliveryDay = startDay
       ? startDay.add(7, 'day')
-      : dayjs(START_DAY).tz('Asia/Aqtau');
+      : dayjs(START_DAY);
     const nowDay = dayjs();
 
     if (deliveryDay.diff(nowDay, 'day') > 7) {
       let lastOrderDay = deliveryDay.subtract(8, 'day');
       lastOrderDay = dayjs(
-        `${lastOrderDay.format('YYYY-MM-DD')} 12:00`
-      ).tz('Asia/Aqtau');
+        `${lastOrderDay.format('YYYY-MM-DD')} 17:00`
+      );
 
       return {
         deliveryDay: deliveryDay.format('DD MMMM'),
         lastOrderDay: lastOrderDay.format('DD MMMM'),
-        shoppingDayRawData: lastOrderDay.add(1, 'day').format(),
+        shoppingDayRawData: lastOrderDay.add(2, 'day').format(),
         deliveryDayRawData: deliveryDay.format(),
         lastOrderDayRawData: lastOrderDay.format()
       };
@@ -37,7 +37,7 @@ const getDeliveryDay = {
   },
 
   '002': () => {
-    const nowDay = dayjs().tz('Europe/Moscow');
+    const nowDay = dayjs();
     const getDay = (input, days) => {
       const day = input.format('d');
       if (days.includes(Number(day))) {
@@ -47,8 +47,8 @@ const getDeliveryDay = {
       return getDay(input.add(1, 'day'), days);
     };
     const lastTimeToOrder = {
-      3: 'T16:00:00+03',
-      6: 'T12:00:00+03'
+      3: 'T19:00:00+03',
+      6: 'T15:00:00+03'
     };
 
     // среда-суббота
@@ -75,7 +75,7 @@ const getDeliveryDay = {
       `${lastOrderDay.format('YYYY-MM-DD')}${
         lastTimeToOrder[lastOrderDay.format('d')]
       }`
-    ).tz('Europe/Moscow');
+    );
 
     // вторник-пятница
     const deliveryDay = getDay(lastOrderDay, [2, 5]);
