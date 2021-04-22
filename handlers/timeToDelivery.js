@@ -15,7 +15,7 @@ const getDeliveryDay = {
     const START_DAY = '2021-04-18T17:00:00+05';
     const deliveryDay = startDay
       ? startDay.add(7, 'day')
-      : dayjs(START_DAY);
+      : dayjs(START_DAY).tz('Asia/Aqtau');
     const nowDay = dayjs();
 
     if (deliveryDay.diff(nowDay, 'day') > 7) {
@@ -37,7 +37,7 @@ const getDeliveryDay = {
   },
 
   '002': () => {
-    const nowDay = dayjs();
+    const nowDay = dayjs().tz('Europe/Moscow');
     const getDay = (input, days) => {
       const day = input.format('d');
       if (days.includes(Number(day))) {
