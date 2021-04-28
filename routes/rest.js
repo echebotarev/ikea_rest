@@ -165,7 +165,8 @@ router
     const { domaDomaShopId = aktauShopId } = req.cookies;
 
     console.log('DomaDomaShopId', domaDomaShopId);
-    
+    console.log('Fn', getDeliveryDay[domaDomaShopId]);
+
     const deliveryDay = getDeliveryDay[domaDomaShopId]();
     res.send(deliveryDay);
   })
