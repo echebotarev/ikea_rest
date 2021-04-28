@@ -164,6 +164,8 @@ router
   .get('/time-to-delivery', (req, res) => {
     const { domaDomaShopId = aktauShopId } = req.cookies;
 
+    console.log('DomaDomaShopId', domaDomaShopId);
+    
     const deliveryDay = getDeliveryDay[domaDomaShopId]();
     res.send(deliveryDay);
   })
