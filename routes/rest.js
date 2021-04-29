@@ -162,8 +162,12 @@ router
   })
 
   .get('/time-to-delivery', (req, res) => {
-    const { domaDomaShopId } = req.cookies;
-    const deliveryDay = getDeliveryDay[domaDomaShopId || aktauShopId]();
+    let { domaDomaShopId } = req.cookies;
+    domaDomaShopId = domaDomaShopId || aktauShopId;
+
+    console.log('DomaDomaShopId', domaDomaShopId);
+    
+    const deliveryDay = getDeliveryDay[domaDomaShopId]();
     res.send(deliveryDay);
   })
 
