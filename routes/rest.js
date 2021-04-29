@@ -69,7 +69,8 @@ router
     req.query.sort = req.query.sort || 'RELEVANCE';
     const queries = encodeURI(getQueries(req.query)).replace(/,/g, '%2C');
 
-    let result = {}, ids = [];
+    let result = {},
+      ids = [];
     if (page && page !== 1) {
       const end = page * PER_PAGE;
       const start = end - PER_PAGE;
@@ -116,10 +117,16 @@ router
     }
 
     const time = Date.now();
-    const availables = await getAvailable({ products: result.productWindow, ikeaShopId });
+    const availables = await getAvailable({
+      products: result.productWindow,
+      ikeaShopId
+    });
     console.log(`Time for get Availables: ${Date.now() - time} ms`);
 
-    result.productWindow = mergeProductsWithAvailables(result.productWindow, availables);
+    result.productWindow = mergeProductsWithAvailables(
+      result.productWindow,
+      availables
+    );
 
     res.send(result);
   })
@@ -134,7 +141,9 @@ router
   })
 
   .get('/search/products', async (req, res) => {
-    let url = `https://sik.search.blue.cdtapps.com/ru/ru/search-result-page?max-num-filters=8&q=${encodeURI(req.query.q)}&autocorrect=true&size=96&columns=4&store=442&subcategories-style=tree-navigation&columns=%26columns%3D4&types=&c=sr&v=20210317`;
+    let url = `https://sik.search.blue.cdtapps.com/ru/ru/search-result-page?max-num-filters=8&q=${encodeURI(
+      req.query.q
+    )}&autocorrect=true&size=96&columns=4&store=442&subcategories-style=tree-navigation&columns=%26columns%3D4&types=&c=sr&v=20210317`;
 
     fetch(url)
       .then(response => response.json())
@@ -163,14 +172,20 @@ router
   })
 
   .get('/time-to-delivery', (req, res) => {
-    let { domaDomaShopId } = req.cookies;
-    domaDomaShopId = (domaDomaShopId || aktauShopId);
-    domaDomaShopId = (domaDomaShopId || '001');
+    const { domaDomaShopId = aktauShopId } = req.cookies;
 
     console.log('aktauShopId', aktauShopId);
     console.log('DomaDomaShopId', domaDomaShopId);
 
-    const deliveryDay = getDeliveryDay[domaDomaShopId]();
+    let deliveryDay = {};
+    try {
+      deliveryDay = getDeliveryDay[domaDomaShopId]();
+    } catch (e) {
+      deliveryDay = getDeliveryDay['001']();
+    }
+
+    console.log('DeliveryDay', deliveryDay);
+
     res.send(deliveryDay);
   })
 
