@@ -21,7 +21,8 @@ const getProducts = url =>
         if (
           json.reason &&
           json.reason.includes('pubdc7bb900') === false &&
-          (json.code === 400 || json.code === 404)
+          (json.code === 400 || json.code === 404) &&
+          json.status !== 'Not Found'
         ) {
           sgMail(
             'sik.search.blue.cdtapps.com',
@@ -166,7 +167,7 @@ router
     domaDomaShopId = domaDomaShopId || aktauShopId;
 
     console.log('DomaDomaShopId', domaDomaShopId);
-    
+
     const deliveryDay = getDeliveryDay[domaDomaShopId]();
     res.send(deliveryDay);
   })
