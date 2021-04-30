@@ -174,17 +174,13 @@ router
   .get('/time-to-delivery', (req, res) => {
     const { domaDomaShopId = aktauShopId } = req.cookies;
 
-    console.log('aktauShopId', aktauShopId);
-    console.log('DomaDomaShopId', domaDomaShopId);
-
     let deliveryDay = {};
     try {
       deliveryDay = getDeliveryDay[domaDomaShopId]();
     } catch (e) {
+      console.log('Typeof shopId', typeof domaDomaShopId);
       deliveryDay = getDeliveryDay['001']();
     }
-
-    console.log('DeliveryDay', deliveryDay);
 
     res.send(deliveryDay);
   })
