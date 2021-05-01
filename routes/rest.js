@@ -173,9 +173,9 @@ router
 
   .get('/time-to-delivery', (req, res) => {
     let { domaDomaShopId = aktauShopId } = req.cookies;
-    domaDomaShopId = domaDomaShopId === 'undefined' ? aktauShopId : domaDomaShopId
+    domaDomaShopId = domaDomaShopId === 'undefined' ? aktauShopId : domaDomaShopId;
 
-    const deliveryDay = getDeliveryDay[domaDomaShopId]();
+    const deliveryDay = getDeliveryDay(domaDomaShopId);
     res.send(deliveryDay);
   })
 
