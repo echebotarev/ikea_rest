@@ -21,7 +21,7 @@ const getDay = (input, days) => {
 const data = {
   lastTimeToOrder: {
     // saturday
-    '001': { 6: ' 19:00' },
+    '001': { 6: ' 15:00' },
     // wednesday, saturday
     '002': {
       3: ' 16:00',
