@@ -80,10 +80,12 @@ const getDeliveryDay = shopId => {
     `${lastOrderDay.format('YYYY-MM-DD')}${
       data.lastTimeToOrder[shopId][lastOrderDay.format('d')]
     }`
-  ).tz('Asia/Aqtau');
+  ).tz(data.timezone[shopId]);
 
-  // вторник-пятница
-  const deliveryDay = getDay(lastOrderDay, data.deliveryDay[shopId]);
+  const deliveryDay =
+    shopId === '001'
+      ? getDay(lastOrderDay.add(2, 'day'), data.deliveryDay[shopId])
+      : getDay(lastOrderDay, data.deliveryDay[shopId]);
 
   return {
     deliveryDay: deliveryDay.format('DD MMMM'),
