@@ -22,6 +22,7 @@ const data = {
   lastTimeToOrder: {
     // saturday
     '001': { 6: ' 19:00' },
+    // wednesday, saturday
     '002': {
       3: ' 16:00',
       6: ' 12:00'
@@ -38,6 +39,10 @@ const data = {
     '001': [0],
     // tuesday-friday
     '002': [2, 5]
+  },
+  shoppingDay: {
+    '001': [1],
+    '002': [1, 4]
   },
   timezone: {
     '001': 'Asia/Aqtau',
@@ -83,7 +88,7 @@ const getDeliveryDay = shopId => {
   return {
     deliveryDay: deliveryDay.format('DD MMMM'),
     lastOrderDay: lastOrderDay.format('DD MMMM'),
-    shoppingDayRawData: getDay(lastOrderDay, [1]).format(),
+    shoppingDayRawData: getDay(lastOrderDay, data.shoppingDay[shopId]).format(),
     deliveryDayRawData: deliveryDay.format(),
     lastOrderDayRawData: lastOrderDay.format()
   };
