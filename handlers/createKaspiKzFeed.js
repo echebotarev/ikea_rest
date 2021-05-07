@@ -6,24 +6,24 @@ const dayjs = require('dayjs');
 const Client = require('./../libs/mongoClient');
 
 const getPrice = require('./../handlers/price');
-// const getAvailable = require('./../libs/getAvailable');
-// const timeout = require('./../libs/timeout');
+const getAvailable = require('./../libs/getAvailable');
+const timeout = require('./../libs/timeout');
 
 const getOffer = async product => {
-  // const available = await getAvailable({
-  //   type: product.utag.product_type,
-  //   id: product.identifier
-  // });
-  // const availableValue =
-  //   available.StockAvailability &&
-  //   available.StockAvailability.RetailItemAvailability &&
-  //   parseInt(
-  //     available.StockAvailability.RetailItemAvailability.AvailableStock['@'],
-  //     10
-  //   )
-  //     ? 'yes'
-  //     : 'no';
-  const availableValue = 'yes';
+  const available = await getAvailable({
+    type: product.utag.product_type,
+    id: product.identifier
+  });
+  const availableValue =
+    available.StockAvailability &&
+    available.StockAvailability.RetailItemAvailability &&
+    parseInt(
+      available.StockAvailability.RetailItemAvailability.AvailableStock['@'],
+      10
+    )
+      ? 'yes'
+      : 'no';
+  // const availableValue = 'yes';
 
   return {
     _attributes: {
@@ -53,7 +53,7 @@ const getOffers = async (products, acc = []) => {
   }
 
   const result = await getOffer(products.splice(0, 1)[0]);
-  // await timeout(100);
+  await timeout(100);
 
   acc.push(result);
   // eslint-disable-next-line no-return-await
