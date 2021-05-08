@@ -5,6 +5,8 @@ const convert = require('xml-js');
 const dayjs = require('dayjs');
 const Client = require('./../libs/mongoClient');
 
+const { samaraShopId } = require('./../constant');
+
 const getPrice = require('./../handlers/price');
 const getAvailable = require('./../libs/getAvailable');
 const timeout = require('./../libs/timeout');
@@ -12,7 +14,8 @@ const timeout = require('./../libs/timeout');
 const getOffer = async product => {
   const available = await getAvailable({
     type: product.utag.product_type,
-    id: product.identifier
+    id: product.identifier,
+    ikeaShopId: samaraShopId
   });
   const availableValue =
     available.StockAvailability &&
