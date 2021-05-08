@@ -41,7 +41,7 @@ const getOffer = async product => {
         _attributes: {
           available: availableValue,
           storeId: 'PP1',
-          preOrder: '14'
+          preOrder: '15'
         }
       }
     },
