@@ -9,6 +9,10 @@ const { samaraShopId } = require('./../constant');
 
 const getPrice = require('./../handlers/price');
 const getAvailable = require('./../libs/getAvailable');
+const getDeliveryDay = require('./timeToDelivery');
+
+const { daysToDelivery } = getDeliveryDay('001');
+
 const timeout = require('./../libs/timeout');
 
 const getOffer = async product => {
@@ -41,7 +45,7 @@ const getOffer = async product => {
         _attributes: {
           available: availableValue,
           storeId: 'PP1',
-          preOrder: '15'
+          preOrder: daysToDelivery.toString()
         }
       }
     },

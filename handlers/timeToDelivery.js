@@ -92,7 +92,8 @@ const getDeliveryDay = shopId => {
     lastOrderDay: lastOrderDay.format('DD MMMM'),
     shoppingDayRawData: getDay(lastOrderDay, data.shoppingDay[shopId]).format(),
     deliveryDayRawData: deliveryDay.format(),
-    lastOrderDayRawData: lastOrderDay.format()
+    lastOrderDayRawData: lastOrderDay.format(),
+    daysToDelivery: deliveryDay.add(1, 'day').diff(nowDay, 'day')
   };
 };
 
