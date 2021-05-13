@@ -9,6 +9,8 @@ dayjs.extend(timezone);
 
 dayjs.locale('ru');
 
+const data = require('./../constant').timeToDeliveryData;
+
 const getDay = (input, days) => {
   const day = input.format('d');
   if (days.includes(Number(day))) {
@@ -16,38 +18,6 @@ const getDay = (input, days) => {
   }
 
   return getDay(input.add(1, 'day'), days);
-};
-
-const data = {
-  lastTimeToOrder: {
-    // saturday
-    '001': { 6: ' 12:00' },
-    // wednesday, saturday
-    '002': {
-      3: ' 16:00',
-      6: ' 12:00'
-    }
-  },
-  lastOrderDay: {
-    // saturday
-    '001': [6],
-    // wednesday-saturday
-    '002': [3, 6]
-  },
-  deliveryDay: {
-    // sunday
-    '001': [0],
-    // tuesday-friday
-    '002': [2, 5]
-  },
-  shoppingDay: {
-    '001': [1],
-    '002': [1, 4]
-  },
-  timezone: {
-    '001': 'Asia/Aqtau',
-    '002': 'Europe/Moscow'
-  }
 };
 
 const getDeliveryDay = shopId => {

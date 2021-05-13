@@ -3,6 +3,37 @@ module.exports = {
   samaraShopId: 442,
   aktauShopId: '001',
   saranskShopId: '002',
+  timeToDeliveryData: {
+    lastTimeToOrder: {
+      // saturday
+      '001': { 6: ' 12:00' },
+      // wednesday, saturday
+      '002': {
+        3: ' 16:00',
+        6: ' 12:00'
+      }
+    },
+    lastOrderDay: {
+      // saturday
+      '001': [6],
+      // wednesday-saturday
+      '002': [3, 6]
+    },
+    deliveryDay: {
+      // sunday
+      '001': [0],
+      // tuesday-friday
+      '002': [2, 5]
+    },
+    shoppingDay: {
+      '001': [1],
+      '002': [1, 4]
+    },
+    timezone: {
+      '001': 'Asia/Aqtau',
+      '002': 'Europe/Moscow'
+    }
+  },
   categoriesDict: {
     od003: 1,
     bm001: 2,
