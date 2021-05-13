@@ -9,6 +9,7 @@ const { samaraShopId } = require('./../constant');
 
 const getPrice = require('./../handlers/price');
 const getAvailable = require('./../libs/getAvailable');
+const calculateAvailable = require('./../utils/calculateAvailable');
 const getDeliveryDay = require('./timeToDelivery');
 
 const { daysToDelivery } = getDeliveryDay('001');
@@ -21,16 +22,7 @@ const getOffer = async product => {
     id: product.identifier,
     ikeaShopId: samaraShopId
   });
-  const availableValue =
-    available.StockAvailability &&
-    available.StockAvailability.RetailItemAvailability &&
-    parseInt(
-      available.StockAvailability.RetailItemAvailability.AvailableStock['@'],
-      10
-    )
-      ? 'yes'
-      : 'no';
-  // const availableValue = 'yes';
+  const availableValue = calculateAvailable(available) ? 'yes' : 'no';
 
   return {
     _attributes: {
