@@ -1,5 +1,4 @@
-const KZT = 6;
-const percent = 40;
+const { currencyCoefficient, percent } = require('./../constant');
 
 const getPrice = (num) => {
   if (typeof num === 'string') {
@@ -8,7 +7,7 @@ const getPrice = (num) => {
   }
 
   // eslint-disable-next-line no-param-reassign
-  num *= KZT;
+  num *= currencyCoefficient;
 
   return Math.ceil(num + (num * percent) / 100);
 };

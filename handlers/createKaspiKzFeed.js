@@ -17,12 +17,13 @@ const { daysToDelivery } = getDeliveryDay('001');
 const timeout = require('./../libs/timeout');
 
 const getOffer = async product => {
-  const available = await getAvailable({
-    type: product.utag.product_type,
-    id: product.identifier,
-    ikeaShopId: samaraShopId
-  });
-  const availableValue = calculateAvailable(available) ? 'yes' : 'no';
+  // const available = await getAvailable({
+  //   type: product.utag.product_type,
+  //   id: product.identifier,
+  //   ikeaShopId: samaraShopId
+  // });
+  // const availableValue = calculateAvailable(available) ? 'yes' : 'no';
+  const availableValue = 'no';
 
   return {
     _attributes: {
