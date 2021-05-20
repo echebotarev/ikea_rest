@@ -5,11 +5,14 @@ module.exports = (products, availables) => {
       available.StockAvailability &&
       available.StockAvailability.RetailItemAvailability
       ? Object.assign(product, {
-          available: parseInt(
-            available.StockAvailability.RetailItemAvailability.AvailableStock[
-              '@'
-            ]
-          )
+          available:
+            available.StockAvailability.RetailItemAvailability
+              .InStockProbabilityCode['@'] === 'LOW'
+              ? 0
+              : parseInt(
+                  available.StockAvailability.RetailItemAvailability
+                    .AvailableStock['@']
+                )
         })
       : product;
   });
