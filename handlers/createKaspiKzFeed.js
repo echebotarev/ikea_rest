@@ -55,7 +55,10 @@ const getOffers = async (products, acc = []) => {
   const result = await getOffer(products.splice(0, 1)[0]);
   await timeout(100);
 
-  acc.push(result);
+  // eslint-disable-next-line no-underscore-dangle
+  if (result.price._text > 5000) {
+    acc.push(result);
+  }
   // eslint-disable-next-line no-return-await
   return await getOffers(products, acc);
 };
