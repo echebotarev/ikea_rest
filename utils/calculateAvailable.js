@@ -14,7 +14,7 @@ const getValueOnShoppingDay = forecast => {
   )[0];
 
   // return value ? parseInt(value.AvailableStock['@'], 10) : null;
-  return value ? value.InStockProbabilityCode['@'] === 'HIGH' && 100 : null;
+  return value ? value.InStockProbabilityCode['@'] === 'HIGH' ? 100 : 0 : null;
 };
 
 const getLastValueFromForecast = forecast => {
