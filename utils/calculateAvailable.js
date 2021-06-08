@@ -13,12 +13,14 @@ const getValueOnShoppingDay = forecast => {
     dayjs(delivery.shoppingDayRawData).isSame(day.ValidDateTime['@'], 'day')
   )[0];
 
-  return value ? parseInt(value.AvailableStock['@'], 10) : null;
+  // return value ? parseInt(value.AvailableStock['@'], 10) : null;
+  return value ? value.InStockProbabilityCode['@'] === 'HIGH' && 100 : null;
 };
 
 const getLastValueFromForecast = forecast => {
   const value = forecast[forecast.length - 1];
-  return parseInt(value.AvailableStock['@'], 10);
+  // return parseInt(value.AvailableStock['@'], 10);
+  return value.InStockProbabilityCode['@'] === 'HIGH' ? 100 : 0;
 };
 
 module.exports = available => {
