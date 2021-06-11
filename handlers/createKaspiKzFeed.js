@@ -38,7 +38,7 @@ const getOffer = async product => {
           available: availableValue,
           storeId: 'PP1',
           // preOrder: daysToDelivery.toString()
-          preOrder: '16'
+          preOrder: '15'
         }
       }
     },
