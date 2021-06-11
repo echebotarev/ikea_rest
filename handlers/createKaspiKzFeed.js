@@ -16,20 +16,13 @@ const { daysToDelivery } = getDeliveryDay('001');
 
 const timeout = require('./../libs/timeout');
 
-let Yes = 0;
-let No = 0;
-
 const getOffer = async product => {
   const available = await getAvailable({
     type: product.utag.product_type,
     id: product.identifier,
     ikeaShopId: samaraShopId
   });
-  const testAvailableValue = calculateAvailable(available) ? 'yes' : 'no';
-  // eslint-disable-next-line no-unused-expressions,no-plusplus
-  testAvailableValue === 'yes' ? Yes++ : No++;
-
-  const availableValue = 'no';
+  const availableValue = calculateAvailable(available) ? 'yes' : 'no';
 
   return {
     _attributes: {
@@ -55,8 +48,6 @@ const getOffer = async product => {
   };
 };
 const getOffers = async (products, acc = []) => {
-  console.log(`Yes: ${Yes}; No: ${No}`);
-
   if (products.length === 0) {
     return acc;
   }
