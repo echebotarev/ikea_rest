@@ -24,6 +24,23 @@ const getLastValueFromForecast = forecast => {
 };
 
 module.exports = available => {
+  // так как у IKEA проблемы с прогнозом поставок, но вроде все в порядке с
+  // прогнозом продаж, я считаю, что если товара нет сейчас, то он не появится и
+  // на момент закупки, чтобы не ошибится.
+  try {
+    if (
+      !available.StockAvailability ||
+      !available.StockAvailability.RetailItemAvailability ||
+      parseInt(!available.StockAvailability.RetailItemAvailability.AvailableStock['@'], 10)
+    ) {
+      return 0;
+    }
+  }
+  catch (e) {
+    console.log('Error: calculate available', e);
+    return 0;
+  }
+
   if (
     !available.StockAvailability ||
     !available.StockAvailability.AvailableStockForecastList ||
