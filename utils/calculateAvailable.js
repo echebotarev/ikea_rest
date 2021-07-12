@@ -31,7 +31,7 @@ module.exports = available => {
     if (
       !available.StockAvailability ||
       !available.StockAvailability.RetailItemAvailability ||
-      parseInt(!available.StockAvailability.RetailItemAvailability.AvailableStock['@'], 10)
+      !parseInt(available.StockAvailability.RetailItemAvailability.AvailableStock['@'], 10)
     ) {
       return 0;
     }
