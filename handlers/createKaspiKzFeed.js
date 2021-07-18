@@ -1,3 +1,5 @@
+const badProducts = require('./../utils/kaspi/bad-products');
+
 const fs = require('fs');
 const path = require('path');
 const convert = require('xml-js');
@@ -23,6 +25,10 @@ const getOffer = async product => {
     ikeaShopId: samaraShopId
   });
   const availableValue = calculateAvailable(available) ? 'yes' : 'no';
+
+  if (badProducts.includes(product.identifier)) {
+    return null;
+  }
 
   return {
     _attributes: {
@@ -56,7 +62,7 @@ const getOffers = async (products, acc = []) => {
   await timeout(100);
 
   // eslint-disable-next-line no-underscore-dangle
-  if (result.price._text > 10000) {
+  if (result && result.price._text > 10000) {
     acc.push(result);
   }
   // eslint-disable-next-line no-return-await
