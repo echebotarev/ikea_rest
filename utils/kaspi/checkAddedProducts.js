@@ -2,8 +2,7 @@
  * Проверка id товаров добавленных в базу Kaspi Shop
  * */
 
-const getPendingProducts = async (start = 0, count = 5) => {
-  const url = 'https://kaspi.kz/merchantcabinet/api/offer/pending/wotrash';
+const getKaspiProducts = async (url, payload) => {
   const { offers } = await fetch(url, {
     method: 'POST',
     headers: {
@@ -12,19 +11,50 @@ const getPendingProducts = async (start = 0, count = 5) => {
       'X-GWT-Module-Base': '/merchantcabinet',
       'Protection-Token': 'Protection-Token-Value'
     },
-    body: JSON.stringify({
-      searchTerm: null,
-      approvalStatus: null,
-      start,
-      count
-    })
+    body: JSON.stringify(payload)
   }).then(resp => resp.json());
 
-  const sku = offers.map(offer => offer.sku);
+  return offers;
+};
+
+const getPendingProducts = async () => {
+  const products = await getKaspiProducts(
+    'https://kaspi.kz/merchantcabinet/api/offer/pending/wotrash',
+    {
+      searchTerm: null,
+      approvalStatus: null,
+      start: 0,
+      count: 4500
+    }
+  );
+
+  const sku = products.map(p => p.sku);
   console.log(JSON.stringify(sku));
 };
 
-const createDisplayId = (id) => {
+// const getPendingProducts = async (start = 0, count = 5) => {
+//   const url = 'https://kaspi.kz/merchantcabinet/api/offer/pending/wotrash';
+//   const { offers } = await fetch(url, {
+//     method: 'POST',
+//     headers: {
+//       Accept: 'application/json',
+//       'Content-Type': 'application/json; charset=UTF-8',
+//       'X-GWT-Module-Base': '/merchantcabinet',
+//       'Protection-Token': 'Protection-Token-Value'
+//     },
+//     body: JSON.stringify({
+//       searchTerm: null,
+//       approvalStatus: null,
+//       start,
+//       count
+//     })
+//   }).then(resp => resp.json());
+//
+//   const sku = offers.map(offer => offer.sku);
+//   console.log(JSON.stringify(sku));
+// };
+
+const createDisplayId = id => {
   // eslint-disable-next-line no-param-reassign
   id = id.replace('s', '');
   return `${id.slice(0, 3)}.${id.slice(3, 6)}.${id.slice(6)}`;
@@ -45,8 +75,9 @@ const getRecommendation = async id => {
       categoryFilter: null,
       categoryCode: null
     })
-  }).then(resp => resp.json())
-    .catch((err) => {
+  })
+    .then(resp => resp.json())
+    .catch(err => {
       console.error(err);
       return [];
     });
