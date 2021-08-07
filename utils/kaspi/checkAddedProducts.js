@@ -17,6 +17,25 @@ const getKaspiProducts = async (url, payload) => {
   return offers;
 };
 
+const getAddedProducts = async (start = 0, count = 500) => {
+  const products = await getKaspiProducts('https://kaspi.kz/merchantcabinet/api/offer', {
+    searchTerm: null,
+    offerStatus: null,
+    categoryCode: null,
+    cityId: null,
+    start,
+    count
+  });
+
+  const output = products.map((p) => ({
+    ikeaSku: p.sku,
+    kaspiSku: p.masterProduct.sku,
+    kaspiUrl: p.masterProduct.productUrl
+  }));
+
+  console.log(JSON.stringify(output));
+};
+
 const getPendingProducts = async () => {
   const products = await getKaspiProducts(
     'https://kaspi.kz/merchantcabinet/api/offer/pending/wotrash',
