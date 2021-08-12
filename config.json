@@ -10,7 +10,6 @@
   "availableUrl": "http://localhost:9090/available",
   "mongo": {
     "uri": "mongodb://localhost:27017/",
-    "dbname": "ikea_0909",
     "productCollectionName": "ikea_spider"
   },
 
