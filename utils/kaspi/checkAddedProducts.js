@@ -36,14 +36,14 @@ const getAddedProducts = async (start = 0, count = 500) => {
   console.log(JSON.stringify(output));
 };
 
-const getPendingProducts = async () => {
+const getPendingProducts = async (count = 4500) => {
   const products = await getKaspiProducts(
     'https://kaspi.kz/merchantcabinet/api/offer/pending/wotrash',
     {
       searchTerm: null,
       approvalStatus: null,
       start: 0,
-      count: 4500
+      count
     }
   );
 
