@@ -175,6 +175,11 @@ router
     let { domaDomaShopId = aktauShopId } = req.cookies;
     domaDomaShopId = domaDomaShopId === 'undefined' ? aktauShopId : domaDomaShopId;
 
+    // TODO: пока мы толком не знаем как будут происходить поставки в Уральск
+    if (domaDomaShopId === '003') {
+      return res.send({});
+    }
+
     const deliveryDay = getDeliveryDay(domaDomaShopId);
     res.send(deliveryDay);
   })
