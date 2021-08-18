@@ -66,6 +66,8 @@ router
     const { ikeaShopId = samaraShopId } = req.cookies;
     const page = parseInt(req.query.page, 10);
 
+    console.log('REST - /products/:categoryId - ikeaShopId', ikeaShopId);
+
     req.query.sort = req.query.sort || 'RELEVANCE';
     const queries = encodeURI(getQueries(req.query)).replace(/,/g, '%2C');
 
@@ -174,6 +176,8 @@ router
   .get('/time-to-delivery', (req, res) => {
     let { domaDomaShopId = aktauShopId } = req.cookies;
     domaDomaShopId = domaDomaShopId === 'undefined' ? aktauShopId : domaDomaShopId;
+
+    console.log('REST - /time-to-delivery - domaDomaShopId', domaDomaShopId);
 
     // TODO: пока мы толком не знаем как будут происходить поставки в Уральск
     if (domaDomaShopId === '003') {
