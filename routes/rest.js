@@ -67,6 +67,8 @@ router
     const page = parseInt(req.query.page, 10);
 
     console.log('REST - /products/:categoryId - ikeaShopId', ikeaShopId);
+    console.log('COOKIE - /products/:categoryId', req.cookies);
+    console.log('=====================');
 
     req.query.sort = req.query.sort || 'RELEVANCE';
     const queries = encodeURI(getQueries(req.query)).replace(/,/g, '%2C');
