@@ -66,7 +66,7 @@ router
     const { ikeaShopId = samaraShopId } = req.cookies;
     const page = parseInt(req.query.page, 10);
 
-    console.log('REST - /products/:categoryId - ikeaShopId', ikeaShopId);
+    console.log(`REST - /products/${categoryId} - ikeaShopId`, ikeaShopId);
     console.log('COOKIE - /products/:categoryId', req.cookies);
     console.log('=====================');
 
