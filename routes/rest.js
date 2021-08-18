@@ -2,6 +2,7 @@ const express = require('express');
 const fetch = require('node-fetch');
 const Client = require('./../libs/mongoClient');
 
+const getShopData = require('./../utils/getShopData');
 const { samaraShopId, aktauShopId } = require('./../constant');
 
 const sgMail = require('./../libs/sgmail');
@@ -43,7 +44,9 @@ const getQueries = payload =>
       key === 'gclid' ||
       key === 'yclid' ||
       key === 'ymclid' ||
-      key === 'fbclid'
+      key === 'fbclid' ||
+      key === 'domaDomaShopId' ||
+      key === 'ikeaShopId'
         ? acc
         : `${acc}${key}=${value}${index === array.length - 1 ? '' : '&'}`,
     ''
@@ -63,11 +66,11 @@ router
   .get('/products/:categoryId', async (req, res) => {
     const PER_PAGE = 24;
     const { categoryId } = req.params;
-    const { ikeaShopId = samaraShopId } = req.cookies;
+    const { ikeaShopId = samaraShopId } = getShopData(req);
     const page = parseInt(req.query.page, 10);
 
     console.log(`REST - /products/${categoryId} - ikeaShopId`, ikeaShopId);
-    console.log('COOKIE - /products/:categoryId', req.cookies);
+    console.log('SHOP Data - /products/:categoryId', getShopData(req));
     console.log('=====================');
 
     req.query.sort = req.query.sort || 'RELEVANCE';
@@ -176,7 +179,7 @@ router
   })
 
   .get('/time-to-delivery', (req, res) => {
-    let { domaDomaShopId = aktauShopId } = req.cookies;
+    let { domaDomaShopId = aktauShopId } = getShopData(req);
     domaDomaShopId = domaDomaShopId === 'undefined' ? aktauShopId : domaDomaShopId;
 
     console.log('REST - /time-to-delivery - domaDomaShopId', domaDomaShopId);
