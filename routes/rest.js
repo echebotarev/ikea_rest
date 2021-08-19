@@ -46,7 +46,8 @@ const getQueries = payload =>
       key === 'ymclid' ||
       key === 'fbclid' ||
       key === 'domaDomaShopId' ||
-      key === 'ikeaShopId'
+      key === 'ikeaShopId' ||
+      key === 'cookieId'
         ? acc
         : `${acc}${key}=${value}${index === array.length - 1 ? '' : '&'}`,
     ''
