@@ -55,9 +55,20 @@ const getOffer = async product => {
         }
       }]
     },
-    price: {
-      _text: getPrice(product.price.price.mainPriceProps.price.integer)
-    }
+    cityprices: {
+      cityprice: [
+        {
+          // Актау
+          _attributes: { cityId: '471010000' },
+          _text: getPrice(product.price.price.mainPriceProps.price.integer)
+        },
+        {
+          // Уральск
+          _attributes: { cityId: '271010000' },
+          _text: getPrice(product.price.price.mainPriceProps.price.integer, '003')
+        }
+      ]
+    },
   };
 };
 const getOffers = async (products, acc = []) => {
