@@ -39,14 +39,21 @@ const getOffer = async product => {
     },
     brand: { _text: 'IKEA' },
     availabilities: {
-      availability: {
+      availability: [{
         _attributes: {
           available: availableValue,
           storeId: 'PP1',
           // preOrder: daysToDelivery.toString()
           preOrder: '15'
         }
-      }
+      }, {
+        _attributes: {
+          available: availableValue,
+          storeId: 'PP2',
+          // preOrder: daysToDelivery.toString()
+          preOrder: '15'
+        }
+      }]
     },
     price: {
       _text: getPrice(product.price.price.mainPriceProps.price.integer)
