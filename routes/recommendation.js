@@ -52,7 +52,11 @@ router
     return fetch(url)
       .then(response => response.json())
       .then(async json => {
-        const products = await getProductsFromDB(json.data, 'item_id', ikeaShopId);
+        const products = await getProductsFromDB(
+          json.data,
+          'item_id',
+          ikeaShopId
+        );
         return res.send(products);
       });
   })
@@ -80,7 +84,9 @@ router
     }
 
     const data = await getRecommendedProductIdsByUrlScheme({ productId: id });
-    const products = getProductsFromDB(data.data.recommended, 'itemId', ikeaShopId);
+    const products = data.data
+      ? getProductsFromDB(data.data.recommended, 'itemId', ikeaShopId)
+      : [];
 
     res.send(products);
   })
@@ -119,7 +125,11 @@ router
     return fetch(url)
       .then(response => response.json())
       .then(async json => {
-        const products = await getProductsFromDB(json.data, 'item_id', ikeaShopId);
+        const products = await getProductsFromDB(
+          json.data,
+          'item_id',
+          ikeaShopId
+        );
         return res.send(products);
       });
   });
