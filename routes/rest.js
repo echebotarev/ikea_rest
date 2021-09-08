@@ -185,11 +185,6 @@ router
 
     console.log('REST - /time-to-delivery - domaDomaShopId', domaDomaShopId);
 
-    // TODO: пока мы толком не знаем как будут происходить поставки в Уральск
-    if (domaDomaShopId === '003') {
-      return res.send({});
-    }
-
     const deliveryDay = getDeliveryDay(domaDomaShopId);
     res.send(deliveryDay);
   })

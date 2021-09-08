@@ -16,27 +16,33 @@ module.exports = {
       '002': {
         3: ' 16:00',
         6: ' 12:00'
-      }
+      },
+      '003': { 6: ' 12:00' }
     },
     lastOrderDay: {
       // saturday
       '001': [6],
       // wednesday-saturday
-      '002': [3, 6]
+      '002': [3, 6],
+      '003': [6]
     },
     deliveryDay: {
       // sunday
       '001': [0],
       // tuesday-friday
-      '002': [2, 5]
+      '002': [2, 5],
+      // wednesday
+      '003': [3]
     },
     shoppingDay: {
       '001': [1],
-      '002': [1, 4]
+      '002': [1, 4],
+      '003': [1]
     },
     timezone: {
       '001': 'Asia/Aqtau',
-      '002': 'Europe/Moscow'
+      '002': 'Europe/Moscow',
+      '003': 'Asia/Oral'
     }
   },
   categoriesDict: {
