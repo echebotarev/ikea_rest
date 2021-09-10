@@ -80,7 +80,7 @@ const getOffers = async (products, acc = []) => {
   await timeout(100);
 
   // eslint-disable-next-line no-underscore-dangle
-  if (result && result.cityprices.cityprice[0]._text > 10000) {
+  if (result && result.cityprices.cityprice[0]._text > 6500) {
     acc.push(result);
   }
   // eslint-disable-next-line no-return-await
