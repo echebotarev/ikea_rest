@@ -14,7 +14,11 @@ const getValueOnShoppingDay = forecast => {
   )[0];
 
   // return value ? parseInt(value.AvailableStock['@'], 10) : null;
-  return value ? value.InStockProbabilityCode['@'] === 'HIGH' ? 100 : 0 : null;
+  return value
+    ? value.InStockProbabilityCode['@'] === 'HIGH'
+      ? 100
+      : 0
+    : null;
 };
 
 const getLastValueFromForecast = forecast => {
@@ -31,12 +35,23 @@ module.exports = available => {
     if (
       !available.StockAvailability ||
       !available.StockAvailability.RetailItemAvailability ||
-      !parseInt(available.StockAvailability.RetailItemAvailability.AvailableStock['@'], 10)
+      !parseInt(
+        available.StockAvailability.RetailItemAvailability.AvailableStock['@'],
+        10
+      )
     ) {
+      if (
+        available.buyingOption &&
+        available.buyingOption.cashCarry &&
+        available.buyingOption.cashCarry.availability &&
+        available.buyingOption.cashCarry.availability.quantity
+      ) {
+        return available.buyingOption.cashCarry.availability.quantity;
+      }
+
       return 0;
     }
-  }
-  catch (e) {
+  } catch (e) {
     console.log('Error: calculate available', e);
     return 0;
   }
