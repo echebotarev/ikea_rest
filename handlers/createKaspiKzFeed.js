@@ -109,6 +109,8 @@ const getOffer = async product => {
     return null;
   }
 
+  const availability = await getAvailabilities(product, SHOP_ID);
+
   return {
     _attributes: {
       sku: product.identifier
@@ -118,7 +120,7 @@ const getOffer = async product => {
     },
     brand: { _text: 'IKEA' },
     availabilities: {
-      availability: getAvailabilities(product, SHOP_ID)
+      availability
     },
     cityprices: {
       cityprice: getCityPrices(product, SHOP_ID)
