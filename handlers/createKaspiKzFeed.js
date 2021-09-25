@@ -86,7 +86,7 @@ const getCityPrices = (product, shopId = '001') => {
       return [
         {
           // Атырау
-          _attributes: { cityId: '' },
+          _attributes: { cityId: '231010000' },
           _text: getPrice(
             product.price.price.mainPriceProps.price.integer,
             '004'
