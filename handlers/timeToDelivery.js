@@ -35,7 +35,7 @@ const getDeliveryDay = shopId => {
       'h'
     );
 
-    console.log('timeToLastTimeToOrder: ', timeToLastTimeToOrder);
+    // console.log('timeToLastTimeToOrder: ', timeToLastTimeToOrder);
 
     if (timeToLastTimeToOrder >= 0) {
       lastOrderDay = getDay(
