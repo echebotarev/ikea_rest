@@ -9,16 +9,16 @@ const Client = require('./../libs/mongoClient');
 
 const { samaraShopId } = require('./../constant');
 
+const getShopIdFromArgs = require('./../utils/kaspi/getShopIdFromArgs');
+
+const SHOP_ID = getShopIdFromArgs(process.argv);
+
 const getPrice = require('./../handlers/price');
 const getAvailable = require('./../libs/getAvailable');
 const calculateAvailable = require('./../utils/calculateAvailable');
 const getDeliveryDay = require('./timeToDelivery');
 
-const { daysToDelivery } = getDeliveryDay('001');
-
-const timeout = require('./../libs/timeout');
-
-const getOffer = async product => {
+const getAvailabilities = async (product, shopId = '001') => {
   const available = await getAvailable({
     type: product.utag.product_type,
     id: product.identifier,
@@ -26,6 +26,84 @@ const getOffer = async product => {
   });
   const availableValue = calculateAvailable(available) ? 'yes' : 'no';
 
+  switch (shopId) {
+    case '001':
+      return [
+        {
+          _attributes: {
+            available: availableValue,
+            storeId: 'PP1',
+            // preOrder: daysToDelivery.toString()
+            preOrder: '15'
+          }
+        },
+        {
+          _attributes: {
+            available: availableValue,
+            storeId: 'PP2',
+            // preOrder: daysToDelivery.toString()
+            preOrder: '15'
+          }
+        }
+      ];
+
+    case '004':
+      return [
+        {
+          _attributes: {
+            available: availableValue,
+            storeId: 'PP1',
+            // preOrder: daysToDelivery.toString()
+            preOrder: '15'
+          }
+        }
+      ];
+
+    default:
+      return [];
+  }
+};
+const getCityPrices = (product, shopId = '001') => {
+  switch (shopId) {
+    case '001':
+      return [
+        {
+          // Актау
+          _attributes: { cityId: '471010000' },
+          _text: getPrice(product.price.price.mainPriceProps.price.integer)
+        },
+        {
+          // Уральск
+          _attributes: { cityId: '271010000' },
+          _text: getPrice(
+            product.price.price.mainPriceProps.price.integer,
+            '003'
+          )
+        }
+      ];
+
+    case '004':
+      return [
+        {
+          // Атырау
+          _attributes: { cityId: '' },
+          _text: getPrice(
+            product.price.price.mainPriceProps.price.integer,
+            '004'
+          )
+        }
+      ];
+
+    default:
+      return [];
+  }
+};
+
+const { daysToDelivery } = getDeliveryDay('001');
+
+const timeout = require('./../libs/timeout');
+
+const getOffer = async product => {
   if (badProducts.includes(product.identifier)) {
     return null;
   }
@@ -39,36 +117,11 @@ const getOffer = async product => {
     },
     brand: { _text: 'IKEA' },
     availabilities: {
-      availability: [{
-        _attributes: {
-          available: availableValue,
-          storeId: 'PP1',
-          // preOrder: daysToDelivery.toString()
-          preOrder: '15'
-        }
-      }, {
-        _attributes: {
-          available: availableValue,
-          storeId: 'PP2',
-          // preOrder: daysToDelivery.toString()
-          preOrder: '15'
-        }
-      }]
+      availability: getAvailabilities(product, SHOP_ID)
     },
     cityprices: {
-      cityprice: [
-        {
-          // Актау
-          _attributes: { cityId: '471010000' },
-          _text: getPrice(product.price.price.mainPriceProps.price.integer)
-        },
-        {
-          // Уральск
-          _attributes: { cityId: '271010000' },
-          _text: getPrice(product.price.price.mainPriceProps.price.integer, '003')
-        }
-      ]
-    },
+      cityprice: getCityPrices(product, SHOP_ID)
+    }
   };
 };
 const getOffers = async (products, acc = []) => {
@@ -108,8 +161,8 @@ const createKaspiKzFeed = async () => {
           'xsi:schemaLocation':
             'kaspiShopping http://kaspi.kz/kaspishopping.xsd'
         },
-        company: { _text: 'Doma-Doma' },
-        merchantid: { _text: 'Domadoma' },
+        company: { _text: SHOP_ID === '004' ? 'IDEA в DOM' : 'Doma-Doma' },
+        merchantid: { _text: SHOP_ID === '004' ? '4876008' : 'Domadoma' },
         offers: {
           offer: offers
         }
@@ -120,7 +173,7 @@ const createKaspiKzFeed = async () => {
 
   // console.log('Res', result);
   fs.writeFile(
-    path.join(__dirname, '../static', 'kaspi-kz-feed.xml'),
+    path.join(__dirname, '../static', SHOP_ID === '004' ? 'kaspi-kz-feed-004.xml' : 'kaspi-kz-feed.xml'),
     result,
     err => {
       if (err) {
