@@ -12,6 +12,7 @@ const { samaraShopId } = require('./../constant');
 const getShopIdFromArgs = require('./../utils/kaspi/getShopIdFromArgs');
 
 const SHOP_ID = getShopIdFromArgs(process.argv);
+console.log('SHOP ID', SHOP_ID);
 
 const getPrice = require('./../handlers/price');
 const getAvailable = require('./../libs/getAvailable');
