@@ -9,6 +9,7 @@ module.exports = {
   samaraShopId: 442,
   aktauShopId: '001',
   saranskShopId: '002',
+  atyrauShopId: '004',
   timeToDeliveryData: {
     lastTimeToOrder: {
       // saturday
@@ -18,14 +19,16 @@ module.exports = {
         3: ' 16:00',
         6: ' 12:00'
       },
-      '003': { 6: ' 12:00' }
+      '003': { 6: ' 12:00' },
+      '004': { 6: ' 12:00' }
     },
     lastOrderDay: {
       // saturday
       '001': [6],
       // wednesday-saturday
       '002': [3, 6],
-      '003': [6]
+      '003': [6],
+      '004': [6]
     },
     deliveryDay: {
       // sunday
@@ -33,17 +36,20 @@ module.exports = {
       // tuesday-friday
       '002': [2, 5],
       // wednesday
-      '003': [3]
+      '003': [3],
+      '004': [3]
     },
     shoppingDay: {
       '001': [1],
       '002': [1, 4],
-      '003': [1]
+      '003': [1],
+      '004': [1]
     },
     timezone: {
       '001': 'Asia/Aqtau',
       '002': 'Europe/Moscow',
-      '003': 'Asia/Oral'
+      '003': 'Asia/Oral',
+      '004': 'Asia/Atyrau'
     }
   },
   categoriesDict: {
