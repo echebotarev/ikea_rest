@@ -1,7 +1,7 @@
 module.exports = {
   currencyCoefficient: 6.2,
   percent: {
-    '001': 45,
+    '001': 60,
     '003': 35,
     '004': 35
   },
