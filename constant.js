@@ -2,8 +2,8 @@ module.exports = {
   currencyCoefficient: 6.2,
   percent: {
     '001': 60,
-    '003': 35,
-    '004': 35
+    '003': 45,
+    '004': 36
   },
   internetShopId: 604,
   samaraShopId: 442,
