@@ -34,16 +34,16 @@ const getAvailabilities = async (product, shopId = '001') => {
           _attributes: {
             available: availableValue,
             storeId: 'PP1',
-            // preOrder: daysToDelivery.toString()
-            preOrder: '15'
+            preOrder: getDeliveryDay(shopId).daysToDelivery.toString()
+            // preOrder: '15'
           }
         },
         {
           _attributes: {
             available: availableValue,
             storeId: 'PP2',
-            // preOrder: daysToDelivery.toString()
-            preOrder: '15'
+            preOrder: getDeliveryDay(shopId).daysToDelivery.toString()
+            // preOrder: '15'
           }
         }
       ];
@@ -54,8 +54,8 @@ const getAvailabilities = async (product, shopId = '001') => {
           _attributes: {
             available: availableValue,
             storeId: 'PP1',
-            // preOrder: daysToDelivery.toString()
-            preOrder: '15'
+            preOrder: getDeliveryDay(shopId).daysToDelivery.toString()
+            // preOrder: '15'
           }
         }
       ];
@@ -99,8 +99,6 @@ const getCityPrices = (product, shopId = '001') => {
       return [];
   }
 };
-
-const { daysToDelivery } = getDeliveryDay('001');
 
 const timeout = require('./../libs/timeout');
 
