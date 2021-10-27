@@ -114,7 +114,7 @@ const getOffer = async product => {
       sku: product.identifier
     },
     model: {
-      _text: `${product.price.productDescription}, IKEA, ${product.price.productName}, ${product.price.measurementText}`
+      _text: `${product.price.productDescription}, IKEA, ${product.identifier}, ${product.price.productName}, ${product.price.measurementText}`
     },
     brand: { _text: 'IKEA' },
     availabilities: {
