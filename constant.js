@@ -3,7 +3,7 @@ module.exports = {
   percent: {
     '001': 60,
     '003': 45,
-    '004': 36
+    '004': 50
   },
   internetShopId: 604,
   samaraShopId: 442,
