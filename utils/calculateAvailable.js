@@ -24,7 +24,10 @@ const getValueOnShoppingDay = forecast => {
 const getLastValueFromForecast = forecast => {
   const value = forecast[forecast.length - 1];
   // return parseInt(value.AvailableStock['@'], 10);
-  return value.InStockProbabilityCode['@'] === 'HIGH' ? 100 : 0;
+  return value.InStockProbabilityCode['@'] === 'HIGH' ||
+    value.InStockProbabilityCode['@'] === 'MEDIUM'
+    ? 100
+    : 0;
 };
 
 module.exports = available => {
