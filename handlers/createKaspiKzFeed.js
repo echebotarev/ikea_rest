@@ -1,4 +1,5 @@
 const badProducts = require('./../utils/kaspi/bad-products');
+const badCategories = require('./../utils/kaspi/bad-categories');
 
 const fs = require('fs');
 const path = require('path');
@@ -103,7 +104,10 @@ const getCityPrices = (product, shopId = '001') => {
 const timeout = require('./../libs/timeout');
 
 const getOffer = async product => {
-  if (badProducts.includes(product.identifier)) {
+  if (
+    badProducts.includes(product.identifier) ||
+    badCategories.includes(product.utag.caregory)
+  ) {
     return null;
   }
 
@@ -174,7 +178,11 @@ const createKaspiKzFeed = async () => {
 
   // console.log('Res', result);
   fs.writeFile(
-    path.join(__dirname, '../static', SHOP_ID === '004' ? 'kaspi-kz-feed-004.xml' : 'kaspi-kz-feed.xml'),
+    path.join(
+      __dirname,
+      '../static',
+      SHOP_ID === '004' ? 'kaspi-kz-feed-004.xml' : 'kaspi-kz-feed.xml'
+    ),
     result,
     err => {
       if (err) {
