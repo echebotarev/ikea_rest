@@ -20,6 +20,21 @@ const getAvailable = require('./../libs/getAvailable');
 const calculateAvailable = require('./../utils/calculateAvailable');
 const getDeliveryDay = require('./timeToDelivery');
 
+const getDeliveryDayWithCoeff = (shopId) => {
+  // каспий прибавляет несколько дней к моей дате доставки
+  // для нивелирования этого эффекта введен этот коэффициент
+  const kaspiDeliveryDayCoeff = {
+    '001': 3,
+    '004': 4
+  };
+  let deliveryDay = getDeliveryDay(shopId).daysToDelivery;
+  if (kaspiDeliveryDayCoeff[shopId]) {
+    deliveryDay -= kaspiDeliveryDayCoeff[shopId];
+  }
+
+  return deliveryDay.toString();
+};
+
 const getAvailabilities = async (product, shopId = '001') => {
   const available = await getAvailable({
     type: product.utag.product_type,
@@ -35,16 +50,14 @@ const getAvailabilities = async (product, shopId = '001') => {
           _attributes: {
             available: availableValue,
             storeId: 'PP1',
-            preOrder: getDeliveryDay(shopId).daysToDelivery.toString()
-            // preOrder: '15'
+            preOrder: getDeliveryDayWithCoeff(shopId)
           }
         },
         {
           _attributes: {
             available: availableValue,
             storeId: 'PP2',
-            preOrder: getDeliveryDay(shopId).daysToDelivery.toString()
-            // preOrder: '15'
+            preOrder: getDeliveryDayWithCoeff(shopId)
           }
         }
       ];
@@ -55,8 +68,7 @@ const getAvailabilities = async (product, shopId = '001') => {
           _attributes: {
             available: availableValue,
             storeId: 'PP1',
-            preOrder: getDeliveryDay(shopId).daysToDelivery.toString()
-            // preOrder: '15'
+            preOrder: getDeliveryDayWithCoeff(shopId)
           }
         }
       ];
