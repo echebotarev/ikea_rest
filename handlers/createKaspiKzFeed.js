@@ -118,7 +118,7 @@ const timeout = require('./../libs/timeout');
 const getOffer = async product => {
   if (
     badProducts.includes(product.identifier) ||
-    badCategories.includes(product.utag.caregory)
+    badCategories.includes(product.utag.category)
   ) {
     return null;
   }
