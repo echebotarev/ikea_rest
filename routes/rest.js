@@ -86,8 +86,9 @@ router
       const resultProducts = await getProducts(
         `https://sik.search.blue.cdtapps.com/ru/ru/product-list-page?category=${categoryId}&size=24&${queries}`
       );
+
       const resultMoreProducts = await getProducts(
-        `http://sik.search.blue.cdtapps.com/ru/ru/product-list-page/more-products?&category=${categoryId}&start=${start}&end=${end}&${queries}`
+        `https://sik.search.blue.cdtapps.com/ru/ru/product-list-page/more-products?store=${ikeaShopId}&category=${categoryId}&start=${start}&end=${end}&${queries}`
       );
 
       result = Object.assign(
