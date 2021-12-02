@@ -20,7 +20,7 @@ const getAvailable = require('./../libs/getAvailable');
 const calculateAvailable = require('./../utils/calculateAvailable');
 const getDeliveryDay = require('./timeToDelivery');
 
-const getDeliveryDayWithCoeff = (shopId) => {
+const getDeliveryDayWithCoeff = shopId => {
   // каспий прибавляет несколько дней к моей дате доставки
   // для нивелирования этого эффекта введен этот коэффициент
   const kaspiDeliveryDayCoeff = {
@@ -48,7 +48,8 @@ const getAvailabilities = async (product, shopId = '001') => {
       return [
         {
           _attributes: {
-            available: availableValue,
+            available:
+              product.identifier === 's09330789' ? 'yes' : availableValue,
             storeId: 'PP1',
             preOrder: getDeliveryDayWithCoeff(shopId)
           }
@@ -84,7 +85,10 @@ const getCityPrices = (product, shopId = '001') => {
         {
           // Актау
           _attributes: { cityId: '471010000' },
-          _text: getPrice(product.price.price.mainPriceProps.price.integer)
+          _text:
+            product.identifier === 's09330789'
+              ? 375959
+              : getPrice(product.price.price.mainPriceProps.price.integer)
         },
         {
           // Уральск
