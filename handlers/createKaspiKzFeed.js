@@ -67,7 +67,11 @@ const getAvailabilities = async (product, shopId = '001') => {
       return [
         {
           _attributes: {
-            available: availableValue,
+            available:
+              product.identifier === '20325121' ||
+              product.identifier === '80419145'
+                ? 'yes'
+                : availableValue,
             storeId: 'PP1',
             preOrder: getDeliveryDayWithCoeff(shopId)
           }
