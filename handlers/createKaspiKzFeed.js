@@ -32,7 +32,7 @@ const getDeliveryDayWithCoeff = shopId => {
     deliveryDay -= kaspiDeliveryDayCoeff[shopId];
   }
 
-  return deliveryDay.toString();
+  return '15'/*deliveryDay.toString()*/;
 };
 
 const getAvailabilities = async (product, shopId = '001') => {
@@ -97,7 +97,7 @@ const getCityPrices = (product, shopId = '001') => {
         {
           // Уральск
           _attributes: { cityId: '271010000' },
-          _text: getPrice(
+          _text: product.identifier === '90400819' ? 143210 : getPrice(
             product.price.price.mainPriceProps.price.integer,
             '003'
           )
