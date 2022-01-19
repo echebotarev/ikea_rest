@@ -3,12 +3,18 @@ const path = require('path');
 const convert = require('xml-js');
 const Client = require('./../libs/mongoClient');
 
-const leadingZero = value => (value.toString().length === 1 ? `0${value}` : value);
-const getSitemapUrls = (categories, products) => {
+const shopIds = process.argv.slice(2);
+const { domainNames } = require('./../constant');
+
+const leadingZero = value =>
+  value.toString().length === 1 ? `0${value}` : value;
+const getSitemapUrls = (domain, categories, products) => {
   // eslint-disable-next-line no-shadow
   const getUrl = ({ path, date }) => ({
     loc: {
-      _text: `https://doma-doma.org/${path}`
+      _text: domain
+        ? `https://${domain}.doma-doma.org/${path}`
+        : `https://doma-doma.org/${path}`
     },
     lastmod: {
       _text: date
@@ -19,12 +25,16 @@ const getSitemapUrls = (categories, products) => {
   });
 
   const d = new Date();
-  const date = `${d.getFullYear()}-${leadingZero(d.getMonth() + 1)}-${leadingZero(d.getDate())}`;
+  const date = `${d.getFullYear()}-${leadingZero(
+    d.getMonth() + 1
+  )}-${leadingZero(d.getDate())}`;
 
   const urls = [
     {
       loc: {
-        _text: 'https://doma-doma.org/'
+        _text: domain
+          ? `https://${domain}.doma-doma.org/`
+          : `https://doma-doma.org/`
       },
       lastmod: {
         _text: date
@@ -44,7 +54,7 @@ const getSitemapUrls = (categories, products) => {
 
   return urls;
 };
-const createSitemap = async () => {
+const createSitemap = async domain => {
   const categories = await Client.get('category');
   const products = await Client.get('product');
 
@@ -60,7 +70,7 @@ const createSitemap = async () => {
         _attributes: {
           xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9'
         },
-        url: getSitemapUrls(categories, products)
+        url: getSitemapUrls(domain, categories, products)
       }
     },
     { compact: true, spaces: 4 }
@@ -68,7 +78,11 @@ const createSitemap = async () => {
 
   // console.log('Res', result);
   fs.writeFile(
-    path.join(__dirname, '../static', 'sitemap.xml'),
+    path.join(
+      __dirname,
+      '../static',
+      domain ? `sitemap-${domain}.xml` : 'sitemap.xml'
+    ),
     result,
     err => {
       if (err) {
@@ -76,11 +90,28 @@ const createSitemap = async () => {
       }
 
       console.log('Ok');
-      return process.exit();
+      // return process.exit();
     }
   );
 };
 
+const createSitemaps = async domains => {
+  if (domains.length === 0) {
+    return true;
+  }
+
+  const domain = domains.splice(0, 1)[0];
+  await createSitemap(domain);
+
+  return createSitemaps(domains);
+};
+
 setTimeout(async () => {
-  await createSitemap();
+  if (shopIds.length) {
+    await createSitemaps(shopIds.map(id => domainNames[id]));
+  } else {
+    await createSitemap();
+  }
+
+  setTimeout(process.exit, 2000);
 }, 2000);

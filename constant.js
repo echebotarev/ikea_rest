@@ -5,6 +5,12 @@ module.exports = {
     '003': 50,
     '004': 50
   },
+  domainNames: {
+    '001': 'aktau',
+    '002': 'saransk',
+    '003': 'uralsk',
+    '004': 'atyrau'
+  },
   internetShopId: 604,
   samaraShopId: 442,
   aktauShopId: '001',
