@@ -32,7 +32,7 @@ const getDeliveryDayWithCoeff = shopId => {
     deliveryDay -= kaspiDeliveryDayCoeff[shopId];
   }
 
-  return '15'/*deliveryDay.toString()*/;
+  return deliveryDay.toString();
 };
 
 const getAvailabilities = async (product, shopId = '001') => {
@@ -67,11 +67,7 @@ const getAvailabilities = async (product, shopId = '001') => {
       return [
         {
           _attributes: {
-            available:
-              product.identifier === '20325121' ||
-              product.identifier === '80419145'
-                ? 'yes'
-                : availableValue,
+            available: availableValue,
             storeId: 'PP1',
             preOrder: getDeliveryDayWithCoeff(shopId)
           }
@@ -97,7 +93,7 @@ const getCityPrices = (product, shopId = '001') => {
         {
           // Уральск
           _attributes: { cityId: '271010000' },
-          _text: product.identifier === '90400819' ? 143210 : getPrice(
+          _text: getPrice(
             product.price.price.mainPriceProps.price.integer,
             '003'
           )
