@@ -93,7 +93,7 @@ const getCityPrices = (product, shopId = '001') => {
             product.identifier === 's09330789'
               ? 375959
               : product.identifier === 's09180596'
-              ? 198198
+              ? 210000
               : getPrice(product.price.price.mainPriceProps.price.integer)
         },
         {
