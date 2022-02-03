@@ -49,7 +49,11 @@ const getAvailabilities = async (product, shopId = '001') => {
         {
           _attributes: {
             available:
-              product.identifier === 's09330789' ? 'yes' : availableValue,
+              product.identifier === 's09330789' ||
+              // Пакс
+              product.identifier === 's09180596'
+                ? 'yes'
+                : availableValue,
             storeId: 'PP1',
             preOrder: getDeliveryDayWithCoeff(shopId)
           }
@@ -88,6 +92,8 @@ const getCityPrices = (product, shopId = '001') => {
           _text:
             product.identifier === 's09330789'
               ? 375959
+              : product.identifier === 's09180596'
+              ? 198198
               : getPrice(product.price.price.mainPriceProps.price.integer)
         },
         {
