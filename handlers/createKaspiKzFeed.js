@@ -25,6 +25,7 @@ const getDeliveryDayWithCoeff = shopId => {
   // для нивелирования этого эффекта введен этот коэффициент
   const kaspiDeliveryDayCoeff = {
     '001': 3,
+    '003': 2,
     '004': 4
   };
   let deliveryDay = getDeliveryDay(shopId).daysToDelivery;
