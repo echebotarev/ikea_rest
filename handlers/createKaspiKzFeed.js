@@ -24,8 +24,8 @@ const getDeliveryDayWithCoeff = shopId => {
   // каспий прибавляет несколько дней к моей дате доставки
   // для нивелирования этого эффекта введен этот коэффициент
   const kaspiDeliveryDayCoeff = {
-    '001': 3,
-    '003': 2,
+    '001-PP1': 3,
+    '001-PP2': 4,
     '004': 4
   };
   let deliveryDay = getDeliveryDay(shopId).daysToDelivery;
@@ -52,14 +52,14 @@ const getAvailabilities = async (product, shopId = '001') => {
             available:
               product.identifier === 's09330789' ? 'yes' : availableValue,
             storeId: 'PP1',
-            preOrder: getDeliveryDayWithCoeff(shopId)
+            preOrder: getDeliveryDayWithCoeff(`${shopId}-PP1`)
           }
         },
         {
           _attributes: {
             available: availableValue,
             storeId: 'PP2',
-            preOrder: getDeliveryDayWithCoeff(shopId)
+            preOrder: getDeliveryDayWithCoeff(`${shopId}-PP2`)
           }
         }
       ];
