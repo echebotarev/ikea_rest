@@ -20,7 +20,7 @@ const getAvailable = require('./../libs/getAvailable');
 const calculateAvailable = require('./../utils/calculateAvailable');
 const getDeliveryDay = require('./timeToDelivery');
 
-const getDeliveryDayWithCoeff = shopId => {
+const getDeliveryDayWithCoeff = (shopId, point) => {
   // каспий прибавляет несколько дней к моей дате доставки
   // для нивелирования этого эффекта введен этот коэффициент
   const kaspiDeliveryDayCoeff = {
@@ -29,8 +29,8 @@ const getDeliveryDayWithCoeff = shopId => {
     '004': 4
   };
   let deliveryDay = getDeliveryDay(shopId).daysToDelivery;
-  if (kaspiDeliveryDayCoeff[shopId]) {
-    deliveryDay -= kaspiDeliveryDayCoeff[shopId];
+  if (kaspiDeliveryDayCoeff[`${shopId}-${point}`]) {
+    deliveryDay -= kaspiDeliveryDayCoeff[`${shopId}-${point}`];
   }
 
   return deliveryDay.toString();
@@ -52,14 +52,14 @@ const getAvailabilities = async (product, shopId = '001') => {
             available:
               product.identifier === 's09330789' ? 'yes' : availableValue,
             storeId: 'PP1',
-            preOrder: getDeliveryDayWithCoeff(`${shopId}-PP1`)
+            preOrder: getDeliveryDayWithCoeff(shopId, 'PP1')
           }
         },
         {
           _attributes: {
             available: availableValue,
             storeId: 'PP2',
-            preOrder: getDeliveryDayWithCoeff(`${shopId}-PP2`)
+            preOrder: getDeliveryDayWithCoeff(shopId, 'PP2')
           }
         }
       ];
