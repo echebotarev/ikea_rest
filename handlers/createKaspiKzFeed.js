@@ -26,7 +26,7 @@ const getDeliveryDayWithCoeff = (shopId, point) => {
   const kaspiDeliveryDayCoeff = {
     '001-PP1': 3,
     '001-PP2': 5,
-    '004': 4
+    '004': 6
   };
   let deliveryDay = getDeliveryDay(shopId).daysToDelivery;
   if (kaspiDeliveryDayCoeff[`${shopId}-${point}`]) {
