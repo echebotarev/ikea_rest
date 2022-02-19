@@ -8,7 +8,7 @@ const Client = require('./../libs/mongoClient');
 
 const { categoriesDict } = require('./../constant');
 
-const getPrice = require('./../handlers/price');
+const Price = require('./../handlers/price');
 
 const getCategory = (category, parentId = null) => {
   if (category.identifier === 'products' || category.identifier === 'pubdc7bb900') {
@@ -130,7 +130,7 @@ const getOffer = product => {
       _text: `https://doma-doma.org/product/${product.identifier}`
     },
     price: {
-      _text: getPrice(product.price.price.mainPriceProps.price.integer)
+      _text: Price.getPrice(product.price.price.mainPriceProps.price.integer)
     },
     description: {
       _text: product.summary_description || ''

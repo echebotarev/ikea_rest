@@ -6,7 +6,7 @@ const Client = require('./../libs/mongoClient');
 
 const { categoriesDict, googleCategoriesIdDict } = require('./../constant');
 
-const getPrice = require('./../handlers/price');
+const Price = require('./../handlers/price');
 
 const timeout = async shift => new Promise(resolve => setTimeout(() => resolve(), shift));
 const getItem = product => {
@@ -70,7 +70,7 @@ const getItem = product => {
       _text: `https://doma-doma.org/product/${product.identifier}`
     },
     'g:price': {
-      _text: `${getPrice(product.price.price.mainPriceProps.price.integer)} KZT`
+      _text: `${Price.getPrice(product.price.price.mainPriceProps.price.integer)} KZT`
     },
     'g:description': {
       _text: product.summary_description || ''
