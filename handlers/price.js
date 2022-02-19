@@ -1,6 +1,8 @@
+const dayjs = require('dayjs');
+
 const { currencyCoefficient, percent, lowPercent } = require('./../constant');
 
-const mongooseClient = require('../libs/db');
+const mongooseClient = require('./../libs/db');
 
 const getPrice = (num, shopId = '001', isLow) => {
   if (typeof num === 'string') {
@@ -11,15 +13,23 @@ const getPrice = (num, shopId = '001', isLow) => {
   // eslint-disable-next-line no-param-reassign
   num *= currencyCoefficient;
 
-  const percentValue = isLow && lowPercent[shopId] ? lowPercent[shopId] : percent[shopId];
+  const percentValue =
+    isLow && lowPercent[shopId] ? lowPercent[shopId] : percent[shopId];
   return Math.ceil(num + (num * percentValue) / 100);
 };
 
 const getMinCompetitorPrice = (prices, shopId) => {
   let minPrice = 10000000;
   prices.forEach((price) => {
-    if (price.shopId === shopId && minPrice > price.price) {
-      minPrice = price.price;
+    // проверка на устаревание данных
+    if (
+      price.updatedAt &&
+      (dayjs(price.updatedAt).isSame(dayjs(), 'day') ||
+        dayjs(price.updatedAt).isSame(dayjs().subtract(1, 'day'), 'day'))
+    ) {
+      if (price.shopId === shopId && minPrice > price.price) {
+        minPrice = price.price;
+      }
     }
   });
   return minPrice !== 10000000 ? minPrice : null;
@@ -27,16 +37,26 @@ const getMinCompetitorPrice = (prices, shopId) => {
 
 const getLowerPrice = async (product, shopId) => {
   // берем обычную цену
-  let price = getPrice(product.price.price.mainPriceProps.price.integer, shopId);
+  let price = getPrice(
+    product.price.price.mainPriceProps.price.integer,
+    shopId
+  );
 
   // самая низкая цена, которую мы можем предложить
-  const lowPrice = getPrice(product.price.price.mainPriceProps.price.integer, shopId, true);
+  const lowPrice = getPrice(
+    product.price.price.mainPriceProps.price.integer,
+    shopId,
+    true
+  );
 
   // берем все цены полученные с Kaspi Shop
-  const productPrices = await mongooseClient.ProductPrice.get(product.identifier);
+  const productPrices = await mongooseClient.ProductPrice.get(
+    product.identifier
+  );
 
   // вычисляем самую низкую цену среди конкурентов
-  const minCompetitorPrice = productPrices && getMinCompetitorPrice(productPrices.prices, shopId);
+  const minCompetitorPrice =
+    productPrices && getMinCompetitorPrice(productPrices.prices, shopId);
 
   // если цена конкурентов ниже нашей
   // если конкурентов нет, то оставляем нашу цену
