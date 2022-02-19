@@ -5,6 +5,10 @@ module.exports = {
     '003': 50,
     '004': 50
   },
+  lowPercent: {
+    '001': 50,
+    '003': 40
+  },
   domainNames: {
     '001': 'aktau',
     '002': 'saransk',

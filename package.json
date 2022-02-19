@@ -19,6 +19,8 @@
     "excel4node": "^1.7.2",
     "express": "^4.17.1",
     "mongodb": "^3.1.13",
+    "mongoose": "^6.2.2",
+    "mongoose-beautiful-unique-validation": "^7.1.1",
     "nconf": "^0.10.0",
     "node-fetch": "^2.6.1",
     "xml-js": "^1.6.11"

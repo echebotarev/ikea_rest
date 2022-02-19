@@ -1,12 +1,17 @@
-const badProducts = require('./../utils/kaspi/bad-products');
-const badCategories = require('./../utils/kaspi/bad-categories');
-
 const fs = require('fs');
 const path = require('path');
 const convert = require('xml-js');
 
 const dayjs = require('dayjs');
-const Client = require('./../libs/mongoClient');
+
+const badProducts = require('./../utils/kaspi/bad-products');
+const badCategories = require('./../utils/kaspi/bad-categories');
+
+// eslint-disable-next-line no-unused-vars
+const mongoose = require('./../libs/connectMongoose');
+
+// база данных товаров
+const mongoClient = require('./../libs/mongoClient');
 
 const { samaraShopId } = require('./../constant');
 
@@ -15,7 +20,7 @@ const getShopIdFromArgs = require('./../utils/kaspi/getShopIdFromArgs');
 const SHOP_ID = getShopIdFromArgs(process.argv);
 console.log('SHOP ID', SHOP_ID);
 
-const getPrice = require('./../handlers/price');
+const Price = require('./../handlers/price');
 const getAvailable = require('./../libs/getAvailable');
 const calculateAvailable = require('./../utils/calculateAvailable');
 const getDeliveryDay = require('./timeToDelivery');
@@ -81,9 +86,15 @@ const getAvailabilities = async (product, shopId = '001') => {
       return [];
   }
 };
-const getCityPrices = (product, shopId = '001') => {
+const getCityPrices = async (product, shopId = '001') => {
   switch (shopId) {
     case '001':
+      // eslint-disable-next-line no-case-declarations
+      const price001 = await Price.getLowerPrice(product, '001');
+
+      // eslint-disable-next-line no-case-declarations
+      const price003 = await Price.getLowerPrice(product, '003');
+
       return [
         {
           // Актау
@@ -91,15 +102,12 @@ const getCityPrices = (product, shopId = '001') => {
           _text:
             product.identifier === 's09330789'
               ? 375959
-              : getPrice(product.price.price.mainPriceProps.price.integer)
+              : price001
         },
         {
           // Уральск
           _attributes: { cityId: '271010000' },
-          _text: getPrice(
-            product.price.price.mainPriceProps.price.integer,
-            '003'
-          )
+          _text: price003
         }
       ];
 
@@ -108,7 +116,7 @@ const getCityPrices = (product, shopId = '001') => {
         {
           // Атырау
           _attributes: { cityId: '231010000' },
-          _text: getPrice(
+          _text: Price.getPrice(
             product.price.price.mainPriceProps.price.integer,
             '004'
           )
@@ -131,6 +139,7 @@ const getOffer = async product => {
   }
 
   const availability = await getAvailabilities(product, SHOP_ID);
+  const cityprice = await getCityPrices(product, SHOP_ID);
 
   return {
     _attributes: {
@@ -143,9 +152,7 @@ const getOffer = async product => {
     availabilities: {
       availability
     },
-    cityprices: {
-      cityprice: getCityPrices(product, SHOP_ID)
-    }
+    cityprices: { cityprice }
   };
 };
 const getOffers = async (products, acc = []) => {
@@ -165,7 +172,7 @@ const getOffers = async (products, acc = []) => {
 };
 
 const createKaspiKzFeed = async () => {
-  const products = await Client.get('product');
+  const products = await mongoClient.get('product');
   const offers = await getOffers(products);
   const result = convert.json2xml(
     {

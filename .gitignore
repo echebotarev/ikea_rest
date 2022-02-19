@@ -5,3 +5,5 @@ node_modules
 assets
 public
 .env
+/static/kaspi*
+package-lock.json
