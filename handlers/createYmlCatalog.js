@@ -8,7 +8,16 @@ const Client = require('./../libs/mongoClient');
 
 const { categoriesDict } = require('./../constant');
 
+let xmlCategories = null;
+let ids = null;
+
 const Price = require('./../handlers/price');
+
+const getAvailable = require('./../libs/getAvailable');
+const calculateAvailable = require('./../utils/calculateAvailable');
+
+const getDeliveryDay = require('./timeToDelivery');
+const { samaraShopId } = require("../constant");
 
 const getCategory = (category, parentId = null) => {
   if (category.identifier === 'products' || category.identifier === 'pubdc7bb900') {
@@ -35,14 +44,14 @@ const getCategory = (category, parentId = null) => {
 };
 const getCategories = categories => {
   const usedIds = [];
-  const xmlCategories = [];
+  const ymlCategories = [];
 
   // eslint-disable-next-line no-plusplus
   for (let i = 0; i < categories.length; i++) {
     const category = categories[i];
     const dataCategory = getCategory(category);
     if (!usedIds.includes(dataCategory.id) && dataCategory.data) {
-      xmlCategories.push(dataCategory.data);
+      ymlCategories.push(dataCategory.data);
       usedIds.push(dataCategory.id);
     }
 
@@ -56,7 +65,7 @@ const getCategories = categories => {
       const subcategory = category.subcategories[j];
       const dataSubcategory = getCategory(subcategory, category.identifier);
       if (!usedIds.includes(dataSubcategory.id) && dataSubcategory.data) {
-        xmlCategories.push(dataSubcategory.data);
+        ymlCategories.push(dataSubcategory.data);
         usedIds.push(dataSubcategory.id);
       }
     }
@@ -64,7 +73,7 @@ const getCategories = categories => {
 
   // возвращаем массив ID, чтобы проверять существующие категории
   // при создании массива офферов
-  return { xmlCategories, ids: usedIds };
+  return { ymlCategories, usedIds };
 };
 
 const getOffer = product => {
@@ -145,12 +154,40 @@ const getOffer = product => {
     picture: getPictures(product.images.fullMediaList)
   };
 };
+const getOffers = async (products, acc = []) => {
+  if (products.length === 0) {
+    return acc;
+  }
 
-const createYmlCatalog = async () => {
-  const categories = await Client.get('category');
-  const products = await Client.get('product');
+  const product = products.splice(0, 1)[0];
 
-  const { xmlCategories, ids } = getCategories(categories);
+  const available = await getAvailable({
+    type: product.utag.product_type,
+    id: product.identifier,
+    ikeaShopId: samaraShopId
+  });
+  const availableValue = calculateAvailable(available);
+  const offer = getOffer(product);
+
+  // проверяем существует ли такая категория
+  // есть ли изображения и описание
+  if (
+    availableValue &&
+    offer &&
+    // eslint-disable-next-line no-underscore-dangle
+    ids.includes(offer.categoryId._text) &&
+    // eslint-disable-next-line no-underscore-dangle
+    offer.description._text &&
+    offer.picture.length
+  ) {
+    acc.push(offer);
+  }
+
+  return getOffers(products, acc);
+};
+
+const createYmlCatalog = async (categories, products) => {
+  const offers = await getOffers(products);
 
   const result = convert.json2xml(
     {
@@ -172,7 +209,7 @@ const createYmlCatalog = async () => {
             _text: 'ИП Егор Чеботарев'
           },
           url: {
-            _text: 'https://doma-doma.org/'
+            _text: 'https://aktau.doma-doma.org/'
           },
           currencies: {
             currency: {
@@ -189,33 +226,12 @@ const createYmlCatalog = async () => {
             option: {
               _attributes: {
                 cost: 0,
-                days: 7
+                days: getDeliveryDay('001').daysToDelivery
               }
             }
           },
           offers: {
-            // проверяем существует ли такая категория
-            // есть ли изображения и описание
-            // eslint-disable-next-line no-shadow
-            offer: (products => {
-              const output = [];
-
-              products.map((product) => {
-                const offer = getOffer(product);
-                if (
-                  offer &&
-                  // eslint-disable-next-line no-underscore-dangle
-                  ids.includes(offer.categoryId._text) &&
-                  // eslint-disable-next-line no-underscore-dangle
-                  offer.description._text &&
-                  offer.picture.length
-                ) {
-                  output.push(offer);
-                }
-              });
-
-              return output;
-            })(products)
+            offer: offers
           }
         }
       }
@@ -239,5 +255,12 @@ const createYmlCatalog = async () => {
 };
 
 setTimeout(async () => {
-  await createYmlCatalog();
+  const categories = await Client.get('category');
+  const products = await Client.get('product');
+
+  const { ymlCategories, usedIds } = getCategories(categories);
+  xmlCategories = ymlCategories;
+  ids = usedIds;
+
+  await createYmlCatalog(categories, products);
 }, 2000);
