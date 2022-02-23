@@ -130,7 +130,8 @@ const getOffer = product => {
 
   return {
     _attributes: {
-      id: product.identifier
+      id: product.identifier,
+      available: 'true'
     },
     name: {
       _text: `${product.price.productDescription}, IKEA, ${product.price.productName}, ${product.price.measurementText}`
