@@ -116,7 +116,7 @@ const getOffer = product => {
   };
   const getPictures = images =>
     images
-      .filter(image => image.type === 'image')
+      .filter((image, index) => image.type === 'image' && index <= 9)
       .map(image => ({
         _text: image.content.url
       }));
