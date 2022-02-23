@@ -179,6 +179,8 @@ const getOffers = async (products, acc = []) => {
     ids.includes(offer.categoryId._text) &&
     // eslint-disable-next-line no-underscore-dangle
     offer.description._text &&
+    // eslint-disable-next-line no-underscore-dangle
+    offer.price._text > 6500 &&
     offer.picture.length
   ) {
     acc.push(offer);
