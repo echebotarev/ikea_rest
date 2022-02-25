@@ -27,7 +27,13 @@ const getMinCompetitorPrice = (prices, shopId) => {
       (dayjs(price.updatedAt).isSame(dayjs(), 'day') ||
         dayjs(price.updatedAt).isSame(dayjs().subtract(1, 'day'), 'day'))
     ) {
-      if (price.shopId === shopId && minPrice > price.price) {
+      if (
+        // рассматриваем только цены в этом городе
+        price.shopId === shopId &&
+        // не сравниваем со своей же ценой
+        price.merchantId !== shopId &&
+        minPrice > price.price
+      ) {
         minPrice = price.price;
       }
     }
