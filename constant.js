@@ -7,7 +7,8 @@ module.exports = {
   },
   lowPercent: {
     '001': 50,
-    '003': 40
+    '003': 40,
+    '004': 40
   },
   domainNames: {
     '001': 'aktau',

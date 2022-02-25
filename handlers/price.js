@@ -24,8 +24,10 @@ const getMinCompetitorPrice = (prices, shopId) => {
     // проверка на устаревание данных
     if (
       price.updatedAt &&
-      (dayjs(price.updatedAt).isSame(dayjs(), 'day') ||
-        dayjs(price.updatedAt).isSame(dayjs().subtract(1, 'day'), 'day'))
+      (
+        dayjs(price.updatedAt).isSame(dayjs(), 'day') ||
+        dayjs(price.updatedAt).isSame(dayjs().subtract(1, 'day'), 'day')
+      )
     ) {
       if (
         // рассматриваем только цены в этом городе

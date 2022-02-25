@@ -112,14 +112,14 @@ const getCityPrices = async (product, shopId = '001') => {
       ];
 
     case '004':
+      // eslint-disable-next-line no-case-declarations
+      const price004 = await Price.getLowerPrice(product, '004');
+
       return [
         {
           // Атырау
           _attributes: { cityId: '231010000' },
-          _text: Price.getPrice(
-            product.price.price.mainPriceProps.price.integer,
-            '004'
-          )
+          _text: price004
         }
       ];
 
