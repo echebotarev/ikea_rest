@@ -19,7 +19,7 @@ const getPrice = (num, shopId = '001', isLow) => {
 };
 
 const getMinCompetitorPrice = (prices, shopId) => {
-  let minPrice = 10000000;
+  let minPrice = 100000000;
   prices.forEach((price) => {
     // проверка на устаревание данных
     if (
@@ -40,7 +40,7 @@ const getMinCompetitorPrice = (prices, shopId) => {
       }
     }
   });
-  return minPrice !== 10000000 ? minPrice : null;
+  return minPrice !== 100000000 ? minPrice : null;
 };
 
 const getLowerPrice = async (product, shopId) => {
