@@ -11,7 +11,7 @@ const getPrice = (num, shopId = '001', isLow) => {
   }
 
   // eslint-disable-next-line no-param-reassign
-  num *= currencyCoefficient;
+  num = shopId === '002' ? num : num * currencyCoefficient;
 
   const percentValue =
     isLow && lowPercent[shopId] ? lowPercent[shopId] : percent[shopId];
