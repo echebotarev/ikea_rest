@@ -1,8 +1,9 @@
 module.exports = {
   currencyCoefficient: 6,
-  kaspiShopIds: ['001', '003', '004'],
+  kaspiShopIds: ['001', '002', '003', '004'],
   percent: {
     '001': 65,
+    '002': 10,
     '003': 50,
     '004': 50
   },

@@ -14,9 +14,9 @@ const managePrices = async products => {
 
   const product = products.splice(0, 1)[0];
 
-  let [price001, price003, price004] = [null, null, null];
+  let [price001, price002, price003, price004] = [null, null, null, null];
   try {
-    [price001, price003, price004] = await Promise.all(
+    [price001, price002, price003, price004] = await Promise.all(
       shopIds.map(shopId => Price.getLowerPrice(product, shopId))
     );
   } catch (e) {
@@ -29,6 +29,7 @@ const managePrices = async products => {
       $set: {
         kaspiPrices: {
           '001': price001,
+          '002': price002,
           '003': price003,
           '004': price004
         }
