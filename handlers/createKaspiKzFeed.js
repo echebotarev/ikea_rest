@@ -44,12 +44,13 @@ const getDeliveryDayWithCoeff = (shopId, point) => {
 };
 
 const getAvailabilities = async (product, shopId = '001') => {
-  const available = await getAvailable({
-    type: product.utag.product_type,
-    id: product.identifier,
-    ikeaShopId: samaraShopId
-  });
-  const availableValue = calculateAvailable(available) ? 'yes' : 'no';
+  // const available = await getAvailable({
+  //   type: product.utag.product_type,
+  //   id: product.identifier,
+  //   ikeaShopId: samaraShopId
+  // });
+  // const availableValue = calculateAvailable(available) ? 'yes' : 'no';
+  const availableValue = 'no';
 
   switch (shopId) {
     case '001':
